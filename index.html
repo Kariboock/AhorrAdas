@@ -1,15 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/5a1a5b242f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="shortcut icon" href="./Img/favicon.svg" type="image/x-icon">
     <title>AhorrADAs</title>
 
 </head>
-<body>
+
+<body class="bg-slate-100">
+    <header class="w-screen"> 
+        <nav class="w-full h-14 flex">
+                    
+            <div class="w-full bg-teal-400 flex items-center p-2">
+                <div class="w-full bg-teal-400 flex items-center">
+                <i class="fas fa-wallet text-3xl" style="color: #ffffff;"></i>
+                <h1 class="font-medium text-white text-3xl ml-3">AhorrADAs</h1> 
+                </div>                
+                <i class="w-full font-small fa-solid fa-bars text-2xl p-2 flex justify-end" style="color: #ffffff;"></i> 
+            </div>               
+                            
+            
+            
+            <!-- <ul class="w-screen flex inline bg-teal-400 text-white text-base items-center justify-end p-2">
+                <li class="p-2">
+                    <i class="fa-solid fa-chart-line p-2"></i>Balance<a class="p-2" href="#"></a>                
+                </li>
+
+                <li class="p-2">
+                    <i class="fa-solid fa-tag p-2"></i>Categorias<a class="p-2" href="#"></a>
+                </li>
+
+                <li class="p-2">
+                    <i class="fa-solid fa-chart-pie p-2"></i>Reportes<a class="p-2" href="#"></a>
+                </li>
+
+            </ul> -->
+        </nav>
+    </header>
+
+    <main class="flex-col">
+
+        <section class="bg-slate-100 text-slate-600 text-slate-8 p-5">
+
+        <div class="w-auto bg-white border-solid rounded-lg mt-14">   
+            <h2 class="text-3xl font-bold p-5">Balance</h2>
+            <div class="flex content-center justify-between p-5">
+            <div class="text-xl">Ganancias</div>
+            <div class="text-emerald-500">+$0</div>
+            </div>
+            <div class="flex content-center justify-between p-5">
+            <div class="text-xl">Gastos</div>
+            <div class="text-red-500">-$0</div>
+            </div>
+            <div class="flex content-center justify-between p-5">
+            <div class="font-medium text-2xl">Total</div>
+            <div class="font-medium">$0</div>
+            </div>
+        </div> 
+        
+        <div class="w-auto bg-white border-solid border-slate-900 rounded-lg mt-8 my-15">
+            <div class="flex content-center justify-between p-5">
+            <h2 class="text-3xl font-medium">Filtros</h2>
+            <div class="text-blue-700 p-3"><a href="">Ocultar filtros</a></div>
+            </div>
+            <div class="p-5">
+            <div class="font-medium mb-5">Tipo</div>
+            <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
+                <option value="">Todos</option>
+                <option value="">Gasto</option>
+                <option value="">Ganancia</option>
+            </select>
+            </div>
+            <div class="p-5">
+                <div class="font-medium mb-5">Categoria</div>
+                <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
+                    <option value="">Todas</option>
+                    <option value="">Trabajo</option>
+                    <option value="">Viajes</option>
+                </select>
+            </div>
+            <div class="p-5">
+                <div class="font-medium mb-5">Desde</div>
+                <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="date" name="" id="">
+            </div>
+            <div class="p-5">
+                <div class="font-medium mb-5">Ordenar por</div>
+                <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
+                    <option value="">Más reciente</option>
+                    <option value="">Menos reciente</option>
+                    <option value="">Mayor monto</option>
+                    <option value="">Menor monto</option>
+                    <option value="">A/Z</option>
+                    <option value="">Z/A</option>
+                </select>
+            </div>             
+        </div>
+
+        <div class="w-auto h-max bg-white border-solid mt-8 my-15 rounded-lg">
+            <h2 class="text-3xl font-medium p-5">Operaciones</h2>
+            <button class="text-white border-2 rounded border-slate-500 bg-teal-400 p-3 ml-5" id="AddButton">+Nueva operación</button>
+            <img class="w-2/3 mt-20 mb-10 mx-20" src="./Img/wallet.svg" alt="">
+            <p class="text-2xl font-medium text-center p-5">Sin resultados</p>
+            <p class="text-center p-5">Cambia los filtros o agrega operaciones</p>
+        </div>
+        
+        </section>
+
+        <!-- <section class="w-2/3 bg-white m-auto mt-28">
+            <h2 class="font-medium text-3xl text-slate-800 p-4" >Categorias</h2>
+            <div><label class="font-medium text-xl text-slate-800 p-4" for="">Nombre</label><input class="border-2 rounded w-3/5" type="text" name="" id="">
+            <button class="rounded border-slate-800 text-white bg-green-400 p-2">Agregar</button>
+            </div>
+
+            <div class="">
+            <div class="text-emerald-700 bg-emerald-100 w-min">Trabajo<a class="text-blue-800" ref="">Editar</a><a class="text-blue-800" ref="">Eliminar</a></div>
+            <div class="text-emerald-700 bg-emerald-100 w-min">Viajes<a class="text-blue-800" ref="">Editar</a><a class="text-blue-800" ref="">Eliminar</a></div>
+            </div>
+        </section>
+
+        <section class="bg-white m-2">
+            <h2>Reportes</h2>
+            <h3>Resumen</h3>
+            <div>Categoria con mayor ganancia</div>
+            <div>Categoria con mayor gasto</div>
+            <div>Categoria con mayor balance</div>
+            <div>Mes con mayor ganancia</div>
+            <div>Mes con mayor gasto</div>
+
+
+        </section> -->
+
+    </main>
+
+
+<footer></footer>
     
 </body>
+
 <script src="./JS/main.js"></script>
 </html>
