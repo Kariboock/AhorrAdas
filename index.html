@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,165 +10,237 @@
     <title>AhorrADAs</title>
 
 </head>
-
 <body class="bg-slate-100">
-    <header class="w-screen"> 
+    <header class="w-screen">
         <nav class="w-full flex h-max">
-                    
             <div class="w-full bg-teal-400 flex items-center p-1">
                 <div class="w-full bg-teal-400 flex items-center">
-                <i class="fas fa-wallet text-3xl ml-1" style="color: #ffffff;"></i>
-                <h1 class="font-medium text-white text-3xl ml-4">AhorrADAs</h1> 
-                </div>                
-                <i class="w-full font-small fa-solid fa-bars text-xl p-2 flex justify-end" style="color: #ffffff;"></i> 
-            </div>          
-                            
+                    <i class="fas fa-wallet text-3xl ml-1" style="color: #ffffff;"></i>
+                    <h1 class="font-medium text-white text-3xl ml-4">AhorrADAs</h1>
+                </div>
+                <i class="w-full font-small fa-solid fa-bars text-xl p-2 flex justify-end" style="color: #ffffff;"></i>
+            </div>
+
             <!-- <ul class="w-screen flex inline bg-teal-400 text-white text-base items-center justify-end p-2">
                 <li class="p-2">
-                    <i class="fa-solid fa-chart-line p-2"></i>Balance<a class="p-2" href="#"></a>                
+                    <i class="fa-solid fa-chart-line p-2"></i>Balance<a class="p-2" id="balance-btn-nav" href="#"></a>                
                 </li>
 
                 <li class="p-2">
-                    <i class="fa-solid fa-tag p-2"></i>Categorias<a class="p-2" href="#"></a>
+                    <i class="fa-solid fa-tag p-2"></i>Categorias<a class="p-2" id="category-btn-nav" href="#"></a>
                 </li>
 
                 <li class="p-2">
-                    <i class="fa-solid fa-chart-pie p-2"></i>Reportes<a class="p-2" href="#"></a>
+                    <i class="fa-solid fa-chart-pie p-2"></i>Reportes<a class="p-2" id="reports-btn-nav" href="#"></a>
                 </li>
 
             </ul> -->
 
         </nav>
     </header>
-
     <main class="flex-col">
-
-        <section class="bg-slate-100 text-slate-600 text-slate-8 my-14 p-4">
-
-        <div class="w-auto bg-white border-solid rounded-lg">   
-            <h2 class="text-3xl font-bold p-5">Balance</h2>
-
-             <div class="flex content-center justify-between p-5">
-             <div class="text-xl">Ganancias</div>
-             <div class="text-emerald-500">+$0</div>
-             </div>
-
-             <div class="flex content-center justify-between p-5">
-             <div class="text-xl">Gastos</div>
-             <div class="text-red-500">-$0</div>
-             </div>
-
-             <div class="flex content-center justify-between p-5">
-             <div class="font-medium text-2xl">Total</div>
-             <div class="font-bold">$0</div>
-             </div>
-
-        </div> 
-        
-        <div class="w-auto bg-white border-solid border-slate-900 rounded-lg mt-8 my-15">
-            <div class="flex content-center justify-between p-5">
-            <h2 class="text-2xl font-bold">Filtros</h2>
-            <div class="text-blue-700 p-3"><a id="HideFilters" href="">Ocultar filtros</a></div>
-            <!-- <div class="text-blue-700 p-3"><a id="ShowFilters" href="">Mostrar filtros</a></div> -->
+        <!--BALANCES SECTION-->
+        <section class="bg-slate-100 text-slate-600 text-slate-8 my-14 p-4" id="balances-section">
+            <div class="w-auto bg-white border-solid rounded-lg">
+                <h2 class="text-3xl font-bold p-5">Balance</h2>
+                <div class="flex content-center justify-between p-5">
+                    <div class="text-xl">Ganancias</div>
+                    <div class="text-emerald-500">+$0</div>
+                </div>
+                <div class="flex content-center justify-between p-5">
+                    <div class="text-xl">Gastos</div>
+                    <div class="text-red-500">-$0</div>
+                </div>
+                <div class="flex content-center justify-between p-5">
+                    <div class="font-medium text-2xl">Total</div>
+                    <div class="font-bold">$0</div>
+                </div>
             </div>
-        
-            <div class="px-5 py-2">
-            <h3 class="font-bold mb-2">Tipo</h3>
-            <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
-                <option value="">Todos</option>
-                <option value="">Gasto</option>
-                <option value="">Ganancia</option>
-            </select>
+            <div class="w-auto bg-white border-solid border-slate-900 rounded-lg mt-8 my-15">
+                <div class="flex content-center justify-between p-5">
+                    <h2 class="text-2xl font-bold">Filtros</h2>
+                    <div class="text-blue-700 p-3"><a id="HideFilters" href="">Ocultar filtros</a></div>
+                    <!-- <div class="text-blue-700 p-3"><a id="ShowFilters" href="">Mostrar filtros</a></div> -->
+                </div>
+                <div class="px-5 py-2">
+                    <h3 class="font-bold mb-2">Tipo</h3>
+                    <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
+                        <option value="">Todos</option>
+                        <option value="">Gasto</option>
+                        <option value="">Ganancia</option>
+                    </select>
+                </div>
+                <div class="px-5 py-2">
+                    <h3 class="font-bold mb-2">Categoria</h3>
+                    <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
+                        <option value="">Todas</option>
+                        <option value="">Trabajo</option>
+                        <option value="">Viajes</option>
+                    </select>
+                </div>
+                <div class="px-5 py-2">
+                    <h3 class="font-bold mb-2">Desde</h3>
+                    <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="date" name="" id="">
+                </div>
+                <div class="px-5 py-2">
+                    <h3 class="font-bold mb-2">Ordenar por</h3>
+                    <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
+                        <option value="">Más reciente</option>
+                        <option value="">Menos reciente</option>
+                        <option value="">Mayor monto</option>
+                        <option value="">Menor monto</option>
+                        <option value="">A/Z</option>
+                        <option value="">Z/A</option>
+                    </select>
+                </div>
             </div>
-
-            <div class="px-5 py-2">
-                <h3 class="font-bold mb-2">Categoria</h3>
-                <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
-                    <option value="">Todas</option>
-                    <option value="">Trabajo</option>
-                    <option value="">Viajes</option>
-                </select>
+            <div class="w-auto h-max bg-white border-solid mt-8 my-15 rounded-lg">
+                <h2 class="text-2xl font-bold p-5">Operaciones</h2>
+                <button class="text-white border-none border-2 rounded border-slate-500 bg-teal-400 p-2 ml-5"
+                    id="new-operation-btn">+ Nueva operación</button>
+                <img class="w-2/3 mt-20 mb-10 mx-20" src="./Img/wallet.svg" alt="">
+                <p class="text-2xl font-medium text-center p-5">Sin resultados</p>
+                <p class="text-center pb-20">Cambia los filtros o agrega operaciones</p>
             </div>
-
-            <div class="px-5 py-2">
-                <h3 class="font-bold mb-2">Desde</h3>
-                <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="date" name="" id="">
-            </div>
-
-            <div class="px-5 py-2">
-                <h3 class="font-bold mb-2">Ordenar por</h3>
-                <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
-                    <option value="">Más reciente</option>
-                    <option value="">Menos reciente</option>
-                    <option value="">Mayor monto</option>
-                    <option value="">Menor monto</option>
-                    <option value="">A/Z</option>
-                    <option value="">Z/A</option>
-                </select>
-            </div>         
-        </div>
-
-        <div class="w-auto h-max bg-white border-solid mt-8 my-15 rounded-lg">
-            <h2 class="text-2xl font-bold p-5">Operaciones</h2>
-            <button class="text-white border-none border-2 rounded border-slate-500 bg-teal-400 p-2 ml-5" id="newOperation">+ Nueva operación</button>
-            <img class="w-2/3 mt-20 mb-10 mx-20" src="./Img/wallet.svg" alt="">
-            <p class="text-2xl font-medium text-center p-5">Sin resultados</p>
-            <p class="text-center pb-20">Cambia los filtros o agrega operaciones</p>
-        </div>
-        
         </section>
-
-        <section class="bg-slate-100 text-slate-600 text-slate-8 my-14 p-4" id="NewOperation">
-        <div class="w-auto bg-white border-solid border-slate-900 rounded-lg mt-8 my-15">
-            <div class="">
-            <h2 class="text-4xl font-bold p-5">Nueva operación</h2>            
+        <!--NEW OPERATION SECTION-->
+        <section class="bg-slate-100 text-slate-600 text-slate-8 my-14 p-4" id="new-operations-section">
+            <div class="w-auto bg-white border-solid border-slate-900 rounded-lg mt-8 my-15">
+                <div class="">
+                    <h2 class="text-4xl font-bold p-5">Nueva operación</h2>
+                </div>
+                <div class="px-5 py-2">
+                    <h3 class="font-bold mb-2">Descripción</h3>
+                    <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="text" name="" id="">
+                </div>
+                <div class="px-5 py-2">
+                    <h3 class="font-bold mb-2">Monto</h3>
+                    <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="number" name="" id="">
+                </div>
+                <div class="px-5 py-2">
+                    <h3 class="font-bold mb-2">Tipo</h3>
+                    <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
+                        <option value="">Gasto</option>
+                        <option value="">Ganancia</option>
+                    </select>
+                </div>
+                <div class="px-5 py-2">
+                    <h3 class="font-bold mb-2">Categoria</h3>
+                    <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
+                        <option value="">Comida</option>
+                        <option value="">Servicio</option>
+                        <option value="">Salidas</option>
+                        <option value="">Educación</option>
+                        <option value="">Transporte</option>
+                        <option value="">Trabajo</option>
+                    </select>
+                </div>
+                <div class="px-5 py-2">
+                    <h3 class="font-bold mb-2">Fecha</h3>
+                    <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="date" name="" id="">
+                </div>
+                <div class="p-5 flex justify-end">
+                    <button class="border-none border-2 rounded border-slate-500 bg-slate-100 p-2"
+                        id="cancelNewOperation">Cancelar</button>
+                    <button class="text-white border-none border-2 rounded border-slate-500 bg-green-400 p-2 ml-3"
+                        id="addNewOperation">Agregar</button>
+                </div>
             </div>
-            <div class="px-5 py-2" >
-                <h3 class="font-bold mb-2">Descripción</h3>
-                <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="text" name="" id="">
+        </section>
+        <!--CATEGORY SECTION-->
+        <section id="category-section"
+            class="w-auto lg:w-1/2 bg-white text-slate-600 lg:mx-auto mx-4 my-28 p-4 rounded-md shadow-md shadow-gray-500/50">
+            <div id="contenedor de la vista" class="justify-center p-4">
+                <h2 class="title-category title font-bold text-3xl  my-5">Categorías</h2>
+                <form id="category-form" class="flex flex-col justify-center my-10">
+                    <div>
+                        <div class="my-2">
+                            <label for="input-add-category" class="font-medium text-xl">Nombre</label>
+                        </div>
+                        <div class="flex">
+                            <input id="input-add-category" name="input-add-category"
+                                class="input border rounded border-gray-400  w-4/5" type="text">
+                            <div class="">
+                                <button id="add-btn-category"
+                                    class="bg-green-500 text-white font-semibold px-4 py-2 ml-4 rounded-md">Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between pt-6 text-xs">
+                        <ul id="categories-list" class="flex flex-col m-2 text-cyan-600"><!--information obtained from js--></ul>
+                    </div>
+                </form>
             </div>
-            <div class="px-5 py-2" >
-                <h3 class="font-bold mb-2">Monto</h3>
-                <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="number" name="" id="">
+        </section>
+        <!--EDIT CATEGORY SECTION-->
+        <section id="category-edit-section"
+            class="w-auto lg:w-1/2 bg-white text-slate-600 lg:mx-auto mx-4 my-28 p-4 rounded-md shadow-md shadow-gray-500/50">
+            <div id="" class="justify-center p-4">
+                <h2 class="title-category title font-bold text-3xl my-5">Editar Categoría</h2>
+                <form id="category-form" class="flex flex-col justify-center my-10">
+                    <div>
+                        <div class="my-2">
+                            <label for="input-edit-category" class="font-medium text-xl">Nombre</label>
+                        </div>
+                        <div class="flex-row">
+                            <input name="input-edit-category" id="input-edit-category"
+                                class="input border rounded border-gray-400 w-full" type="text">
+                            <div class="flex justify-end pt-6">
+                                <button type="button"
+                                    class="bg-gray-300 text-black font-semibold px-3 py-2 ml-4 rounded-md"
+                                    id="boton-cancelar-editar-categoria">Cancelar</button>
+                                <button id="edit-btn-category"
+                                    class="bg-green-500 text-white font-semibold px-4 py-2 ml-4 rounded-md">Editar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="px-5 py-2" >
-            <h3 class="font-bold mb-2">Tipo</h3>
-            <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
-                <option value="">Gasto</option>
-                <option value="">Ganancia</option>
-            </select>
+        </section>
+        <!--REPORTS SECTION-->
+        <section id="reports-section"
+            class="w-auto lg:w-1/2 bg-white text-slate-600 lg:mx-auto mx-4 my-28 p-4 rounded-md shadow-md shadow-gray-500/50">
+            <div class="flex-row justify-center p-4">
+                <h2 class="title-category title font-bold text-3xl my-5">Reportes</h2>
+                <div id="no-reports-container" class="w-2/5 m-auto">
+                    <figure class="">
+                        <img src="https://frontend-proyecto-ahorradas.adaitw.org/imgs/chart.svg" alt="reports-img">
+                    </figure>
+                    <h3 class="text-gray-800 font-semibold text-lg m-6">Operaciones insuficientes</h3>
+                    <h4 class="text-gray-800 mb-2">Prueba agregando más operaciones</h4>
+                </div>
+                <div id="summary-container" class="m-auto hidden">
+                    <h3 class="font-semibold text-2xl m-4">Resumen</h3>
+                    <div class="flex justify-between m-2">
+                        <p>Categoría con mayor ganancia</p>
+                        <div id="highest-earning-category-name" class="bg-emerald-100 text-cyan-600">trabajo</div>
+                        <div id="highest-earning-category-amount" class="text-emerald-500">+$210000</div>
+                    </div>
+                    <div class="flex justify-between m-2">
+                        <p>Categoría con mayor gasto</p>
+                        <div id="highest-spending-category-name" class="bg-emerald-100 text-cyan-600"><!--information obtained from js--></div>
+                        <div id="highest-spending-category-amount" class="text-red-500"><!--information obtained from js--></div>
+                    </div>
+                    <div class="flex justify-between m-2">
+                        <p>Categoría con mayor balance</p>
+                        <div id="highest-balance-category-name" class="bg-emerald-100 text-cyan-600"><!--information obtained from js--></div>
+                        <div id="highest-balance-category-amount" class="text-gray-500"><!--information obtained from js--></div>
+                    </div>
+                    <div class="flex justify-between m-2">
+                        <p>Mes con mayor ganancia</p>
+                        <div id="highest-earning-month-name" class="text-gray-600"><!--information obtained from js--></div>
+                        <div id="highest-earning-month-amount" class="text-emerald-500"><!--information obtained from js--></div>
+                    </div>
+                    <div class="flex justify-between m-2">
+                        <p>Mes con mayor gasto</p>
+                        <div id="highest-spending-month-name" class="text-gray-600"><!--information obtained from js--></div>
+                        <div id="highest-spending-month-amount" class="text-red-500"><!--information obtained from js--></div>
+                    </div>
+                </div>
             </div>
-            <div class="px-5 py-2">
-                <h3 class="font-bold mb-2">Categoria</h3>
-                <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
-                    <option value="">Comida</option>
-                    <option value="">Servicio</option>
-                    <option value="">Salidas</option>
-                    <option value="">Educación</option>
-                    <option value="">Transporte</option>
-                    <option value="">Trabajo</option>
-                </select>
-            </div>
-            <div class="px-5 py-2">
-                <h3 class="font-bold mb-2">Fecha</h3>
-                <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="date" name="" id="">
-            </div>  
-        <div class="p-5 flex justify-end">
-        <button class="border-none border-2 rounded border-slate-500 bg-slate-100 p-2" id="cancelNewOperation">Cancelar</button>
-        <button class="text-white border-none border-2 rounded border-slate-500 bg-green-400 p-2 ml-3" id="addNewOperation">Agregar</button>
-        </div>
-        </div>
-    </section>
-
-
-       
-
+        </section>
     </main>
-
-
-<footer></footer>
-    
+    <footer></footer>
+    <script src="./JS/main.js"></script>
 </body>
-
-<script src="./JS/main.js"></script>
 </html>
