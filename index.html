@@ -10,7 +10,7 @@
     <title>AhorrADAs</title>
 
 </head>
-<body class="bg-slate-100">
+<body class="w-full h-full bg-slate-100">
     <header class="w-screen">
         <nav class="w-full flex h-max">
             <div class="w-full bg-teal-400 flex items-center p-1">
@@ -22,6 +22,7 @@
             </div>
 
              <ul class="w-screen flex inline bg-teal-400 text-white text-base items-center justify-end p-2">
+
                 <li class="p-2">
                     <i class="fa-solid fa-chart-line p-2"></i><a class="p-2" id="balance-btn-nav" href="#">Balance</a>                
                 </li>
@@ -40,8 +41,8 @@
     </header>
     <main class="flex-col">
         <!--BALANCES SECTION-->
-        <section class="w-auto lg:w-1/2 text-slate-600 lg:mx-auto mx-4 my-28 rounded-md" id="balances-section">
-            <div class="w-auto bg-white border-solid rounded-md shadow-md  shadow-gray-300">
+        <section class="w-auto text-slate-600 lg:mx-auto mx-4 my-28 rounded-md" id="balances-section">
+            <div class="w-auto lg:w-1/4 bg-white border-solid rounded-md shadow-md shadow-gray-300 ml-20">
                 <h2 class="text-3xl font-bold p-5">Balance</h2>
                 <div class="flex content-center justify-between p-5">
                     <div class="text-xl">Ganancias</div>
@@ -56,7 +57,7 @@
                     <div class="font-bold">$0</div>
                 </div>
             </div>
-            <div class="w-auto bg-white border-solid border-slate-900 mt-8 my-15 rounded-md shadow-md shadow-gray-300">
+            <div class="w-auto lg:w-1/4 bg-white border-solid border-slate-900 mt-8 my-15 rounded-md shadow-md shadow-gray-300 ml-20">
                 <div class="flex content-center justify-between p-5">
                     <h2 class="text-2xl font-bold">Filtros</h2>
                     <div class="text-blue-700 p-3"><a id="HideFilters" href="">Ocultar filtros</a></div>
@@ -94,7 +95,7 @@
                     </select>
                 </div>
             </div>
-            <div class="w-auto h-max bg-white border-solid mt-8 my-15 rounded-md shadow-md shadow-gray-300">
+            <div class="w-auto h-max lg:w-2/3 bg-white border-solid mt-8 my-15 rounded-md shadow-md shadow-gray-300">
                 <h2 class="text-2xl font-bold p-5">Operaciones</h2>
                 <button class="text-white border-none border-2 rounded border-slate-500 bg-teal-400 p-2 ml-5"
                     id="new-operation-btn">+ Nueva operación</button>
@@ -155,14 +156,7 @@
                 <form id="category-form" class="flex flex-col justify-center my-10">
                     <div>
                         <div class="my-2">
-                            <label for="input-add-category" class="font-medium text-xl">Nombre</label>
-                        </div>
-                        <div class="flex">
-                            <input id="input-add-category" name="input-add-category"
-                                class="input border rounded border-gray-400  w-4/5" type="text">
-                            <div class="">
-                                <button id="add-btn-category"
-                                    class="bg-green-500 text-white font-semibold px-4 py-2 ml-4 rounded-md">Agregar</button>
+                            <label for="input-add-green-500 text-white font-semibold px-4 py-2 ml-4 rounded-md">Agregar</button>
                             </div>
                         </div>
                     </div>
