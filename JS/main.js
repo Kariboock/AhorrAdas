@@ -70,9 +70,9 @@ const categories = getData("categoriesLS") || categoriesListDefault
 
 const categoriesList = (categories) => {
     cleanContainer("#categories-list")
+    cleanContainer("#categories-option-filters")
+    cleanContainer("#categories-option-operations")
     for (const category of categories) {
-        //    let nameOfCategory = category.categoryName;
-        //    let idOfCategory = category.id;
         $("#categories-list").innerHTML += `
         <div class="flex justify-between">
           <li class="m-2 p-0.5 bg-emerald-100">${category.categoryName}</li>
@@ -82,6 +82,8 @@ const categoriesList = (categories) => {
           </div>
         </div>
         `
+        $("#categories-option-filters").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
+        $("#categories-option-operations").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
     }
 }
 categoriesList(categories)
@@ -97,10 +99,45 @@ const deleteCategory = (categoryId) => {
             setData('categoriesLS', filteredCategories);
             categoriesList(categories)
             deleteCategory(categoryId)
-            window.location.reload("#categories-list")
+            window.location.reload(["#categories-list", "#categories-option-filters", "#categories-option-operations"])
         }
     }
 }
+
+
+// //edit category
+const viewEditCategory = (idOfCategory) => {
+    hiddenElement(["#new-operations-section", "#reports-section", "#category-section", "#balances-section"])
+    $("#category-edit-section").classList.remove('hidden')
+    $("#edit-btn-category").setAttribute("category-selected-id", idOfCategory);
+
+    const categoryToEdit = getData("categoriesLS").find(category => {
+        if (category.id === idOfCategory) {
+            return saveNewEditedCategory(idOfCategory)
+        }
+        return category
+    })
+    $("#input-edit-category").value = categoryToEdit.categoryName
+    setData("categoriesLS", saveNewEditedCategory(categoryToEdit))
+}
+
+
+//  const confirmEditCategory = (idOfCategory) => {
+//      for (let i = 0; i < $$('.edit-categories').length; i++) {
+//          $$('.edit-categories')[i].onclick = () => {
+//             const coincidente = getData("categoriesLS").find(category => {
+//                 if (category.id === idOfCategory) {
+//                     category.categoryName = $("#input-edit-category").value
+//                 }
+                
+//             })  
+//         } 
+//         return coincidente
+//     } setData('categoriesLS', coincidente)
+//     categoriesList(categories)
+//     confirmEditCategory(idOfCategory)
+//     //window.location.reload() 
+// }
 
 //add category 
 const saveNewCategory = () => {
@@ -111,34 +148,14 @@ const saveNewCategory = () => {
 }
 setData('categoriesLS', saveNewCategory())
 
-//edit category
-// const viewEditCategory = (idOfCategory) => {
-//     hiddenElement(["#new-operations-section", "#reports-section", "#category-section", "#balances-section"])
-//     $("#category-edit-section").classList.remove('hidden')
-//     $("#edit-btn-category").setAttribute("category-selected-id", idOfCategory);
-//      $("#input-edit-category").value = categoryToEdit.categoryName
-//     const categoryToEdit = getData("categoriesLS").find(category => {
-//         if(category.id === idOfCategory){
-//             return saveNewCategory(idOfCategory)
-//         }
-//         return category
-//     })
-//     setData("categoriesLS", categoryToEdit)
-// }
+const  saveNewEditedCategory = () => {
+    return {
+        categoryName: $("#input-edit-category").value,
+        id: randomId(),
+    }
+}
+setData('categoriesLS', saveNewEditedCategory())
 
-
-// const confirmEditCategory = (idOfCategory) => {
-//     for (let i = 0; i < $$('.edit-categories').length; i++) {
-//         $$('.edit-categories')[i].onclick = () => {
-//             if (getData("categoriesLS").find(category => category.id === idOfCategory)){
-//                 categoryToEdit = category.categoryName = $("#input-edit-category").value}
-//             setData('categoriesLS', categoryToEdit)
-//             categoriesList(categories)
-//             confirmEditCategory(idOfCategory)
-//             window.location.reload() 
-//         } 
-//     }
-// }
 
 $("#boton-cancelar-editar-categoria").onclick = () => {
     hiddenElement(["#category-edit-section", "#new-operations-section", "#reports-section", "#balances-section"])
@@ -159,12 +176,12 @@ const initializeApp = () => {
         window.location.reload()
     })
 
-    // $("#edit-btn-category").addEventListener("click", (e) => {
-    //     e.preventDefault()
-    //     confirmEditCategory()
+    $("#edit-btn-category").addEventListener("click", (e) => {
+        e.preventDefault()
+        confirmEditCategory()
 
-    //     // const categoryId = $("#edit-btn-category").getAttribute("category-selected-id")
-    // })
+        // const categoryId = $("#edit-btn-category").getAttribute("category-selected-id")
+    })
 
 }
 window.addEventListener("load", initializeApp)
