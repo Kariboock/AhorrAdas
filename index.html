@@ -10,20 +10,15 @@
     <title>AhorrADAs</title>
 
 </head>
-
-<body class="bg-slate-100">
-    <header class="w-screen">
-        <nav class="w-full flex h-max">
-            <div class="w-full bg-teal-400 flex items-center p-1">
-                <div class="w-full bg-teal-400 flex items-center">
-                    <i class="fas fa-wallet text-3xl ml-1" style="color: #ffffff;"></i>
-                    <h1 class="font-medium text-white text-3xl ml-4">AhorrADAs</h1>
-                </div>
-                <i class="w-full font-small fa-solid fa-bars text-xl p-2 flex justify-end" style="color: #ffffff;"></i>
-            </div>
-
-             <ul class="w-screen flex inline bg-teal-400 text-white text-base items-center justify-end p-2">
-
+<body class="w-full flex-col bg-slate-100">
+    <header class="w-full h-14">
+            <nav class="w-full h-14 bg-teal-400 flex items-center p-1">   
+                   
+                <i class="fas fa-wallet text-3xl ml-1" style="color: #ffffff;"></i>
+                <h1 class="font-medium text-white text-3xl ml-4">AhorrADAs</h1>
+                <i class="w-full h-max bg-teal-400 md:hidden font-small fa-solid fa-bars text-xl p-2 flex justify-end" style="color: #ffffff;"></i>
+                   
+            <ul class="w-screen max-h-20 md:flex md:bg-teal-400 md:text-white bg-white text-black text-base items-center justify-end">
                 <li class="p-2">
                     <i class="fa-solid fa-chart-line p-2"></i><a class="p-2" id="balance-btn-nav" href="#">Balance</a>                
                 </li>
@@ -40,11 +35,10 @@
         
     </header>
     <main class="flex-col">
-        <!--BALANCES SECTION--> 
-
-        <section class="w-auto lg:w-1/2 text-slate-600 lg:mx-auto mx-4 my-28 rounded-md" id="balances-section">
-            <div class="w-auto bg-white border-solid rounded-md shadow-md  shadow-gray-300">
-
+        <!--BALANCES SECTION-->
+        <section class="flex flex-col md:flex-row lg:mx-20 lg:my-20 rounded-md my-15" id="balances-section">
+        <div class="flex-col lg:w-1/4 md:w-full mx-10">    
+            <div class="bg-white border-solid rounded-md my-10 shadow-md shadow-gray-300">
                 <h2 class="text-3xl font-bold p-5">Balance</h2>
                 <div class="flex content-center justify-between p-5">
                     <div class="text-xl">Ganancias</div>
@@ -59,51 +53,51 @@
                     <div class="font-bold">$0</div>
                 </div>
             </div>
-
-            <div class="w-auto bg-white border-solid border-slate-900 mt-8 my-15 rounded-md shadow-md shadow-gray-300">
-
+            <div class="bg-white border-solid border-slate-900 mt-8 rounded-md my-10 shadow-md shadow-gray-300">
                 <div class="flex content-center justify-between p-5">
                     <h2 class="text-2xl font-bold">Filtros</h2>
-                    <div class="text-blue-700 p-3"><a id="HideFilters" href="">Ocultar filtros</a></div>
-                    <!-- <div class="text-blue-700 p-3"><a id="ShowFilters" href="">Mostrar filtros</a></div> -->
+                    <div class="text-blue-700 p-3">
+                        <button id="hide-filters">Ocultar filtros</button>
+                        <button id="show-filters" class="hidden">Mostrar filtros</button>
+                    </div>
                 </div>
-                <div class="px-5 py-2">
-                    <h3 class="font-bold mb-2">Tipo</h3>
-                    <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
-                        <option value="">Todos</option>
-                        <option value="">Gasto</option>
-                        <option value="">Ganancia</option>
-                    </select>
-                </div>
-                <div class="px-5 py-2">
-                    <h3 class="font-bold mb-2">Categoria</h3>
-                    <select class="w-full border-solid border-2 border-gray-400 rounded p-2 categories-option" id="categories-option-filters"><!--information obtained from js--></select>
-                </div>
-                <div class="px-5 py-2">
-                    <h3 class="font-bold mb-2">Desde</h3>
-                    <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="date" name="" id="">
-                </div>
-                <div class="px-5 py-2">
-                    <h3 class="font-bold mb-2">Ordenar por</h3>
-                    <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
-                        <option value="">Más reciente</option>
-                        <option value="">Menos reciente</option>
-                        <option value="">Mayor monto</option>
-                        <option value="">Menor monto</option>
-                        <option value="">A/Z</option>
-                        <option value="">Z/A</option>
-                    </select>
+                <div id="container-filters">
+                    <div class="px-5 py-2">
+                        <h3 class="font-bold mb-2">Tipo</h3>
+                        <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
+                            <option value="">Todos</option>
+                            <option value="">Gasto</option>
+                            <option value="">Ganancia</option>
+                        </select>
+                    </div>
+                    <div class="px-5 py-2">
+                        <h3 class="font-bold mb-2">Categoria</h3>
+                        <select class="w-full border-solid border-2 border-gray-400 rounded p-2 categories-option"
+                            id="categories-option-filters"><!--information obtained from js--></select>
+                    </div>
+                    <div class="px-5 py-2">
+                        <h3 class="font-bold mb-2">Desde</h3>
+                        <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="date" name="" id="">
+                    </div>
+                    <div class="px-5 py-2">
+                        <h3 class="font-bold mb-2">Ordenar por</h3>
+                        <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
+                            <option value="">Más reciente</option>
+                            <option value="">Menos reciente</option>
+                            <option value="">Mayor monto</option>
+                            <option value="">Menor monto</option>
+                            <option value="">A/Z</option>
+                            <option value="">Z/A</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-
         </div>
         <div>
-        <div class="flex-wrap" id="operations-section">    
-           
-            <div class="w-auto h-max bg-white border-solid mt-8 my-15 rounded-md shadow-md shadow-gray-300">
-
-                <h2 class="text-2xl font-bold p-5">Operaciones</h2>                   
-                <button class="border-none border-2 rounded border-slate-500 bg-teal-400 p-2 ml-4"
+        <div class="flex">    
+            <div class="bg-white border-solid my-10 rounded-md mx-10 shadow-md shadow-gray-300">
+                <h2 class="text-2xl font-bold p-5">Operaciones</h2>
+                <button class="text-white border-none border-2 rounded border-slate-500 bg-teal-400 p-2 ml-4"
                     id="new-operation-btn">+ Nueva operación</button>
                 <div class="" id="no-results">    
                 <img class="w-2/3 mt-20 mb-10 mx-20" src="./Img/wallet.svg" alt="">
@@ -225,11 +219,7 @@
         </div>
     </div>
     </section>
-
-
-
-
-
+    
 
         <!--CATEGORY SECTION-->
         <section id="category-section"
@@ -261,7 +251,7 @@
             class="w-auto lg:w-1/2 bg-white text-slate-600 lg:mx-auto mx-4 my-28 p-4 rounded-md shadow-md shadow-gray-300 hidden">
             <div id="" class="justify-center p-4">
                 <h2 class="title-category title font-bold text-3xl my-5">Editar Categoría</h2>
-                <form id="category-form" class="flex flex-col justify-center my-10">
+                <form id="category-edit-form" class="flex flex-col justify-center my-10">
                     <div>
                         <div class="my-2">
                             <label for="input-edit-category" class="font-medium text-xl">Nombre</label>

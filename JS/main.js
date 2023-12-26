@@ -38,7 +38,7 @@ $("#new-operation-btn").addEventListener('click', () => {
     hiddenElement(["#reports-section", "#category-section", "#balances-section", "#category-edit-section"]);
 })
 
-//                                                          CATEGORIAS
+/* CATEGORIAS */
 const categoriesListDefault = [
     {
         categoryName: 'Comidas',
@@ -72,18 +72,20 @@ const categoriesList = (categories) => {
     cleanContainer("#categories-list")
     cleanContainer("#categories-option-filters")
     cleanContainer("#categories-option-operations")
-    for (const category of categories) {
-        $("#categories-list").innerHTML += `
-        <div class="flex justify-between">
-          <li class="m-2 p-0.5 bg-emerald-100">${category.categoryName}</li>
-          <div class="flex ">
-            <button type="button" class="m-2 text-sky-700 mx-1 w-win" edit-categories onclick="viewEditCategory('${category.id}')">Editar</button>
-            <button type="button" class="m-2 text-sky-700 mx-1 w-win delete-categories" onclick="deleteCategory('${category.id}')">Eliminar</button>
-          </div>
-        </div>
-        `
-        $("#categories-option-filters").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
-        $("#categories-option-operations").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
+    if (Array.isArray(categories) && categories !== undefined && categories !== null) {
+        for (const category of categories) {
+            $("#categories-list").innerHTML += `
+            <div class="flex justify-between">
+                <li class="m-2 p-0.5 bg-emerald-100">${category.categoryName}</li>
+                <div class="flex ">
+                <button type="button" class="m-2 text-sky-700 mx-1 w-win edit-categories" onclick="viewEditCategory('${category.id}')">Editar</button>
+                <button type="button" class="m-2 text-sky-700 mx-1 w-win delete-categories" onclick="deleteCategory('${category.id}')">Eliminar</button>
+                </div>
+            </div>
+            `
+            $("#categories-option-filters").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
+            $("#categories-option-operations").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
+        }
     }
 }
 categoriesList(categories)
@@ -103,41 +105,31 @@ const deleteCategory = (categoryId) => {
         }
     }
 }
+//deleteCategory(category)
 
 
 // //edit category
 const viewEditCategory = (idOfCategory) => {
     hiddenElement(["#new-operations-section", "#reports-section", "#category-section", "#balances-section"])
     $("#category-edit-section").classList.remove('hidden')
-    $("#edit-btn-category").setAttribute("category-selected-id", idOfCategory);
 
-    const categoryToEdit = getData("categoriesLS").find(category => {
-        if (category.id === idOfCategory) {
-            return saveNewEditedCategory(idOfCategory)
-        }
-        return category
-    })
-    $("#input-edit-category").value = categoryToEdit.categoryName
-    setData("categoriesLS", saveNewEditedCategory(categoryToEdit))
+    const categoryToEdit = getData("categoriesLS").find(category => category.id === idOfCategory);
+    $("#input-edit-category").value = categoryToEdit.categoryName;
+    $("#edit-btn-category").setAttribute("category-selected-id", idOfCategory);
 }
 
+const confirmEditCategory = () => {
+    const idOfCategory = $("#edit-btn-category").getAttribute("category-selected-id");
+    const updatedCategories = getData("categoriesLS").map(category => {
+        if (category.id === idOfCategory) {
+            category.categoryName = $("#input-edit-category").value;
+        }
+        return category;
+    });
 
-//  const confirmEditCategory = (idOfCategory) => {
-//      for (let i = 0; i < $$('.edit-categories').length; i++) {
-//          $$('.edit-categories')[i].onclick = () => {
-//             const coincidente = getData("categoriesLS").find(category => {
-//                 if (category.id === idOfCategory) {
-//                     category.categoryName = $("#input-edit-category").value
-//                 }
-                
-//             })  
-//         } 
-//         return coincidente
-//     } setData('categoriesLS', coincidente)
-//     categoriesList(categories)
-//     confirmEditCategory(idOfCategory)
-//     //window.location.reload() 
-// }
+    setData('categoriesLS', updatedCategories);
+    categoriesList(updatedCategories);
+}
 
 //add category 
 const saveNewCategory = () => {
@@ -148,7 +140,7 @@ const saveNewCategory = () => {
 }
 setData('categoriesLS', saveNewCategory())
 
-const  saveNewEditedCategory = () => {
+const saveNewEditedCategory = () => {
     return {
         categoryName: $("#input-edit-category").value,
         id: randomId(),
@@ -156,11 +148,22 @@ const  saveNewEditedCategory = () => {
 }
 setData('categoriesLS', saveNewEditedCategory())
 
-
 $("#boton-cancelar-editar-categoria").onclick = () => {
-    hiddenElement(["#category-edit-section", "#new-operations-section", "#reports-section", "#balances-section"])
+    hiddenElement(["#category-edit-section", "#new-operations-section", "#reports-section", "#balances-section"]);
     $("#category-section").classList.remove('hidden')
 }
+
+/* FILTROS */
+$("#hide-filters").addEventListener("click", () => {
+    hiddenElement(["#container-filters", "#hide-filters"]);
+    $("#show-filters").classList.remove('hidden')
+})
+
+$("#show-filters").addEventListener("click", () => {
+    $("#show-filters").classList.add('hidden')
+    $("#container-filters").classList.remove('hidden');
+    $("#hide-filters").classList.remove('hidden')
+})
 
 //INICIALIZE FUNCTION
 const initializeApp = () => {  
@@ -179,12 +182,12 @@ const initializeApp = () => {
 
     $("#edit-btn-category").addEventListener("click", (e) => {
         e.preventDefault()
+        const updateEditedCategories = getData('categoriesLS')
+        updateEditedCategories.push(saveNewEditedCategory())
+        setData('categoriesLS', updateEditedCategories)
+        categoriesList(categories)
         confirmEditCategory()
     })
-
-
-    // const categoryId = $("#edit-btn-category").getAttribute("category-selected-id")
- 
 }
 window.addEventListener("load", initializeApp)
 
