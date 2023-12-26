@@ -141,7 +141,7 @@ const viewEditCategory = (idOfCategory) => {
 
 //add category 
 const saveNewCategory = () => {
-    return {
+     return {
         categoryName: $("#input-add-category").value,
         id: randomId(),
     }
