@@ -163,7 +163,8 @@ $("#boton-cancelar-editar-categoria").onclick = () => {
 }
 
 //INICIALIZE FUNCTION
-const initializeApp = () => {
+const initializeApp = () => {  
+
     setData('categoriesLS', categories);
     categoriesList(categories);
 
@@ -179,9 +180,77 @@ const initializeApp = () => {
     $("#edit-btn-category").addEventListener("click", (e) => {
         e.preventDefault()
         confirmEditCategory()
-
-        // const categoryId = $("#edit-btn-category").getAttribute("category-selected-id")
     })
 
+
+    // const categoryId = $("#edit-btn-category").getAttribute("category-selected-id")
+ 
 }
 window.addEventListener("load", initializeApp)
+
+
+// Funciones Kari
+
+const operations = getData("operationsLS") || []
+
+// RENDERS
+const renderNewOperations = (operationsLS) => {
+    for (const operation of operationsLS) {
+        $("#table").innerHTML += `
+        <tr>
+        <td>${operation.Descripcion}</td>
+        <td>${operation.Categoria}</td>
+        <td>${operation.Fecha}</td>
+        <td>${operation.Monto}</td>
+        <td>
+        <button>Editar</button>
+        <button>Eliminar</button>        
+        </td>          
+        </tr>  
+        `
+    }
+}
+
+const saveNewOperation = () => {
+    return {
+        id:randomId(),
+        Descripcion: $("#description").value,
+        Categoria:$("#categories-option-operations").value,
+        Fecha:$("#date").value,
+        Monto:$("#amount").value
+    }
+}
+
+// EVENTS
+
+setData("operationsLS",operations);
+renderNewOperations(operations);
+        
+    
+
+$("#addNewOperation").addEventListener("click",() => {
+    hiddenElement(["#new-operations-section", "#no-results"])
+    $("#balances-section").classList.remove("hidden")  
+    $("#table").classList.remove("hidden")  
+})
+
+$("#cancelNewOperation").addEventListener("click",() => {  
+    hiddenElement(["#new-operations-section"])  
+    $("#balances-section").classList.remove("hidden")  
+})
+
+$("#addNewOperation").addEventListener("click",() => {
+    e.preventDefault()
+    const currentData = getData("operationsLS")
+    currentData.push(saveNewOperation())
+    setData("operationsLS",currentData)
+})       
+
+// SECTION EDIT OPERATION
+
+$("#editBtnTable").addEventListener("click",() => {
+    $("#edit-operations-section").classList.renove("hidden")
+    hiddenElement(["#balancesections"])
+})
+
+
