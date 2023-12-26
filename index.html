@@ -56,35 +56,40 @@
             <div class="bg-white border-solid border-slate-900 mt-8 rounded-md my-10 shadow-md shadow-gray-300">
                 <div class="flex content-center justify-between p-5">
                     <h2 class="text-2xl font-bold">Filtros</h2>
-                    <div class="text-blue-700 p-3"><a id="HideFilters" href="">Ocultar filtros</a></div>
-                    <!-- <div class="text-blue-700 p-3"><a id="ShowFilters" href="">Mostrar filtros</a></div> -->
+                    <div class="text-blue-700 p-3">
+                        <button id="hide-filters">Ocultar filtros</button>
+                        <button id="show-filters" class="hidden">Mostrar filtros</button>
+                    </div>
                 </div>
-                <div class="px-5 py-2">
-                    <h3 class="font-bold mb-2">Tipo</h3>
-                    <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
-                        <option value="">Todos</option>
-                        <option value="">Gasto</option>
-                        <option value="">Ganancia</option>
-                    </select>
-                </div>
-                <div class="px-5 py-2">
-                    <h3 class="font-bold mb-2">Categoria</h3>
-                    <select class="w-full border-solid border-2 border-gray-400 rounded p-2 categories-option" id="categories-option-filters"><!--information obtained from js--></select>
-                </div>
-                <div class="px-5 py-2">
-                    <h3 class="font-bold mb-2">Desde</h3>
-                    <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="date" name="" id="">
-                </div>
-                <div class="px-5 py-2">
-                    <h3 class="font-bold mb-2">Ordenar por</h3>
-                    <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
-                        <option value="">Más reciente</option>
-                        <option value="">Menos reciente</option>
-                        <option value="">Mayor monto</option>
-                        <option value="">Menor monto</option>
-                        <option value="">A/Z</option>
-                        <option value="">Z/A</option>
-                    </select>
+                <div id="container-filters">
+                    <div class="px-5 py-2">
+                        <h3 class="font-bold mb-2">Tipo</h3>
+                        <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
+                            <option value="">Todos</option>
+                            <option value="">Gasto</option>
+                            <option value="">Ganancia</option>
+                        </select>
+                    </div>
+                    <div class="px-5 py-2">
+                        <h3 class="font-bold mb-2">Categoria</h3>
+                        <select class="w-full border-solid border-2 border-gray-400 rounded p-2 categories-option"
+                            id="categories-option-filters"><!--information obtained from js--></select>
+                    </div>
+                    <div class="px-5 py-2">
+                        <h3 class="font-bold mb-2">Desde</h3>
+                        <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="date" name="" id="">
+                    </div>
+                    <div class="px-5 py-2">
+                        <h3 class="font-bold mb-2">Ordenar por</h3>
+                        <select class="w-full border-solid border-2 border-gray-400 rounded p-2" id="">
+                            <option value="">Más reciente</option>
+                            <option value="">Menos reciente</option>
+                            <option value="">Mayor monto</option>
+                            <option value="">Menor monto</option>
+                            <option value="">A/Z</option>
+                            <option value="">Z/A</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -170,7 +175,7 @@
             class="w-auto lg:w-1/2 bg-white text-slate-600 lg:mx-auto mx-4 my-28 p-4 rounded-md shadow-md shadow-gray-300 hidden">
             <div id="" class="justify-center p-4">
                 <h2 class="title-category title font-bold text-3xl my-5">Editar Categoría</h2>
-                <form id="category-form" class="flex flex-col justify-center my-10">
+                <form id="category-edit-form" class="flex flex-col justify-center my-10">
                     <div>
                         <div class="my-2">
                             <label for="input-edit-category" class="font-medium text-xl">Nombre</label>
