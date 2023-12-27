@@ -165,6 +165,73 @@ $("#show-filters").addEventListener("click", () => {
     $("#hide-filters").classList.remove('hidden')
 })
 
+
+
+// Funciones Kari
+
+const operations = getData("operationsLS") || []
+
+// RENDERS
+const renderNewOperations = (operationsLS) => {
+    for (const operation of operationsLS) {
+        $("#body-table").innerHTML += `
+        <tr>
+        <td>${operation.Descripcion}</td>
+        <td>${operation.Categoria}</td>
+        <td>${operation.Fecha}</td>
+        <td>${operation.Monto}</td>
+        <td>
+        <button class="text-blue-300" id="editBtnTable">Editar</button>
+        <button class="text-blue-300" id="deleteBtnTable">Eliminar</button>        
+        </td>          
+        </tr>  
+        `
+    }
+}
+
+
+
+
+const saveNewOperation = () => {
+    return {
+        id:randomId(),
+        Descripcion: $("#description").value,
+        Categoria:$("#categories-option-operations").value,
+        Fecha:$("#date").value,
+        Monto:$("#amount").value
+    }
+}
+
+// EVENTS
+
+setData("operationsLS",operations);
+renderNewOperations(operations);
+        
+    
+
+$("#addNewOperation").addEventListener("click",() => {
+    //e.preventDefault()
+    hiddenElement(["#new-operations-section", "#no-results"])
+    $("#balances-section").classList.remove("hidden")  
+    $("#table").classList.remove("hidden")
+    const currentData = getData("operationsLS")
+    currentData.push(saveNewOperation())
+    setData("operationsLS",currentData)
+})
+
+$("#cancelNewOperation").addEventListener("click",() => {  
+    hiddenElement(["#new-operations-section"])  
+    $("#balances-section").classList.remove("hidden")  
+}) 
+
+// SECTION EDIT OPERATION
+
+$("#editBtnTable").addEventListener("click",() => {
+    $("#edit-operations-section").classList.remove("hidden")
+    hiddenElement(["#balances-section"])
+})
+
+
 //INICIALIZE FUNCTION
 const initializeApp = () => {  
 
@@ -190,70 +257,3 @@ const initializeApp = () => {
     })
 }
 window.addEventListener("load", initializeApp)
-
-
-// Funciones Kari
-
-const operations = getData("operationsLS") || []
-
-// RENDERS
-const renderNewOperations = (operationsLS) => {
-    for (const operation of operationsLS) {
-        $("#table").innerHTML += `
-        <tr>
-        <td>${operation.Descripcion}</td>
-        <td>${operation.Categoria}</td>
-        <td>${operation.Fecha}</td>
-        <td>${operation.Monto}</td>
-        <td>
-        <button>Editar</button>
-        <button>Eliminar</button>        
-        </td>          
-        </tr>  
-        `
-    }
-}
-
-const saveNewOperation = () => {
-    return {
-        id:randomId(),
-        Descripcion: $("#description").value,
-        Categoria:$("#categories-option-operations").value,
-        Fecha:$("#date").value,
-        Monto:$("#amount").value
-    }
-}
-
-// EVENTS
-
-setData("operationsLS",operations);
-renderNewOperations(operations);
-        
-    
-
-$("#addNewOperation").addEventListener("click",() => {
-    hiddenElement(["#new-operations-section", "#no-results"])
-    $("#balances-section").classList.remove("hidden")  
-    $("#table").classList.remove("hidden")  
-})
-
-$("#cancelNewOperation").addEventListener("click",() => {  
-    hiddenElement(["#new-operations-section"])  
-    $("#balances-section").classList.remove("hidden")  
-})
-
-$("#addNewOperation").addEventListener("click",() => {
-    e.preventDefault()
-    const currentData = getData("operationsLS")
-    currentData.push(saveNewOperation())
-    setData("operationsLS",currentData)
-})       
-
-// SECTION EDIT OPERATION
-
-$("#editBtnTable").addEventListener("click",() => {
-    $("#edit-operations-section").classList.renove("hidden")
-    hiddenElement(["#balancesections"])
-})
-
-
