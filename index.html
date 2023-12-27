@@ -105,19 +105,15 @@
                 <p class="text-center pb-20">Cambia los filtros o agrega operaciones</p>
                 </div>
                 <div class="hidden" id="table">
-                    <table id="table-container">
+                    <table id="table-container" class="flex flex-col p-10">
                         <thead class=""> 
                             <th class="p-8">Descripción</th>
                             <th class="p-8">Categoría</th>
                             <th class="p-8">Fecha</th>
                             <th class="p-6">Monto</th>
-                            <th class="p-8">Acciones</th>
-                            <th>
-                                <button class="text-blue-300" id="editBtnTable">Editar</button>
-                                <button class="text-blue-300" id="deleteBtnTable">Eliminar</button>
-                            </th>
+                            <th class="p-8">Acciones</th>                                         
                         </thead>
-                        <tbody id="table">
+                        <tbody id="body-table">
             
                         </tbody>
                     </table>
@@ -183,7 +179,7 @@
     <section id="edit-operations-section" class="w-auto lg:w-1/2 lg:mx-auto bg-slate-100 text-slate-600 text-slate-8 my-14 rounded-md shadow-md shadow-gray-300 hidden">
         <div class="w-auto bg-white border-solid border-slate-900 rounded-lg mt-8 my-15">
             <div class="">
-                <h2 class="text-4xl font-bold p-5">Nueva operación</h2>
+                <h2 class="text-4xl font-bold p-5">Editar operación</h2>
             </div>
             <div class="px-5 py-2">
                 <h3 class="font-bold mb-2">Descripción</h3>
