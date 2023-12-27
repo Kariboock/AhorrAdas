@@ -165,34 +165,11 @@ $("#show-filters").addEventListener("click", () => {
     $("#hide-filters").classList.remove('hidden')
 })
 
-//INICIALIZE FUNCTION
-const initializeApp = () => {  
-
-    setData('categoriesLS', categories);
-    categoriesList(categories);
-
-    $("#add-btn-category").addEventListener("click", (e) => {
-        e.preventDefault()
-        const updateCategories = getData('categoriesLS')
-        updateCategories.push(saveNewCategory())
-        setData('categoriesLS', updateCategories)
-        categoriesList(categories)
-        window.location.reload()
-    })
-
-    $("#edit-btn-category").addEventListener("click", (e) => {
-        e.preventDefault()
-        const updateEditedCategories = getData('categoriesLS')
-        updateEditedCategories.push(saveNewEditedCategory())
-        setData('categoriesLS', updateEditedCategories)
-        categoriesList(categories)
-        confirmEditCategory()
-    })
-}
-window.addEventListener("load", initializeApp)
 
 
 // Funciones Kari
+
+// OPERATIONS
 
 const operations = getData("operationsLS") || []
 
@@ -223,14 +200,7 @@ const saveNewOperation = () => {
         Monto:$("#amount").value
     }
 }
-
-// EVENTS
-
-setData("operationsLS",operations);
-renderNewOperations(operations);
-        
-    
-
+   
 $("#addNewOperation").addEventListener("click",() => {
     hiddenElement(["#new-operations-section", "#no-results"])
     $("#balances-section").classList.remove("hidden")  
@@ -252,8 +222,44 @@ $("#addNewOperation").addEventListener("click",() => {
 // SECTION EDIT OPERATION
 
 $("#editBtnTable").addEventListener("click",() => {
-    $("#edit-operations-section").classList.renove("hidden")
+    $("#edit-operations-section").classList.remove("hidden")
     hiddenElement(["#balancesections"])
 })
 
 
+//INICIALIZE FUNCTION
+const initializeApp = () => {  
+
+    setData('categoriesLS', categories);
+    categoriesList(categories);
+
+    $("#add-btn-category").addEventListener("click", (e) => {
+        e.preventDefault()
+        const updateCategories = getData('categoriesLS')
+        updateCategories.push(saveNewCategory())
+        setData('categoriesLS', updateCategories)
+        categoriesList(categories)
+        window.location.reload()
+    })
+
+    $("#edit-btn-category").addEventListener("click", (e) => {
+        e.preventDefault()
+        const updateEditedCategories = getData('categoriesLS')
+        updateEditedCategories.push(saveNewEditedCategory())
+        setData('categoriesLS', updateEditedCategories)
+        categoriesList(categories)
+        confirmEditCategory()
+    })
+
+    
+    setData("operationsLS",operations);
+    renderNewOperations(operations);
+
+
+
+
+
+
+
+}
+window.addEventListener("load", initializeApp)
