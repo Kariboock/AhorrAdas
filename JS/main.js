@@ -15,6 +15,7 @@ const hiddenElement = (selectors) => {
 }
 
 const cleanContainer = (selector) => $(selector).innerHTML = ""
+
 /* Nav events */
 $("#balance-btn-nav").addEventListener('click', () => {
     $("#balances-section").classList.remove('hidden');
@@ -38,30 +39,49 @@ $("#new-operation-btn").addEventListener('click', () => {
     hiddenElement(["#reports-section", "#category-section", "#balances-section", "#category-edit-section"]);
 })
 
+$("#btn-options-nav").addEventListener("click", () => {
+    $("#btn-options-nav").classList.add('hidden')
+    $("#btn-cruz-options").classList.remove('hidden')
+    $("#navbar-btn").classList.remove('hidden')
+    $("#navbar-btn").classList.add("fixed","top-19","right-0","mt-8","shadow-md","shadow-gray-300", "rounded-md")
+})
+
+$("#btn-cruz-options").addEventListener("click", () => {
+    $("#btn-cruz-options").classList.add("hidden")
+    $("#navbar-btn").classList.add("hidden")
+    $("#btn-options-nav").classList.remove('hidden')
+    $("#navbar-btn").classList.remove("fixed","top-19","right-0","mt-8","shadow-md","shadow-gray-300","rounded-md")
+})
+
+
 /* CATEGORIAS */
 const categoriesListDefault = [
     {
-        categoryName: 'Comidas',
+        categoryName: 'Todas',
         id: randomId(),
     },
     {
-        categoryName: 'Servicios',
+        categoryName: 'comidas',
         id: randomId(),
     },
     {
-        categoryName: 'Salidas',
+        categoryName: 'servicios',
         id: randomId(),
     },
     {
-        categoryName: 'Educación',
+        categoryName: 'salidas',
         id: randomId(),
     },
     {
-        categoryName: 'Transporte',
+        categoryName: 'educación',
         id: randomId(),
     },
     {
-        categoryName: 'Trabajo',
+        categoryName: 'transporte',
+        id: randomId(),
+    },
+    {
+        categoryName: 'trabajo',
         id: randomId(),
     }
 ];
@@ -75,13 +95,11 @@ const categoriesList = (categories) => {
     if (Array.isArray(categories) && categories !== undefined && categories !== null) {
         for (const category of categories) {
             $("#categories-list").innerHTML += `
-            <div class="flex justify-between">
-                <li class="m-2 p-0.5 bg-emerald-100">${category.categoryName}</li>
+                <li class="m-2 p-0.5 bg-emerald-100" value="${category.categoryName}">${category.categoryName}</li>
                 <div class="flex ">
                 <button type="button" class="m-2 text-sky-700 mx-1 w-win edit-categories" onclick="viewEditCategory('${category.id}')">Editar</button>
                 <button type="button" class="m-2 text-sky-700 mx-1 w-win delete-categories" onclick="deleteCategory('${category.id}')">Eliminar</button>
                 </div>
-            </div>
             `
             $("#categories-option-filters").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
             $("#categories-option-operations").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
@@ -153,17 +171,6 @@ $("#boton-cancelar-editar-categoria").onclick = () => {
     $("#category-section").classList.remove('hidden')
 }
 
-/* FILTROS */
-$("#hide-filters").addEventListener("click", () => {
-    hiddenElement(["#container-filters", "#hide-filters"]);
-    $("#show-filters").classList.remove('hidden')
-})
-
-$("#show-filters").addEventListener("click", () => {
-    $("#show-filters").classList.add('hidden')
-    $("#container-filters").classList.remove('hidden');
-    $("#hide-filters").classList.remove('hidden')
-})
 
 
 // Funciones Kari
@@ -175,8 +182,8 @@ renderNewOperations(operations);
 
 
 // RENDERS
-const renderNewOperations = (operationsLS) => {
-    for (const operation of operationsLS) {
+const renderNewOperations = (operations) => {
+    for (const operation of operations) {
         $("#body-table").innerHTML += `
         <tr>
         <td>${operation.Descripcion}</td>
@@ -205,14 +212,15 @@ const saveNewOperation = () => {
 // EVENTS
    
 
-$("#addNewOperation").addEventListener("click",() => {
-    //e.preventDefault()
+$("#addNewOperation").addEventListener("click", (e) => {
+    e.preventDefault()
     hiddenElement(["#new-operations-section", "#no-results"])
     $("#balances-section").classList.remove("hidden")  
     $("#table").classList.remove("hidden")
     const currentData = getData("operationsLS")
     currentData.push(saveNewOperation())
     setData("operationsLS",currentData)
+    renderNewOperations()
 })
 
 $("#cancelNewOperation").addEventListener("click",() => {  
@@ -222,10 +230,63 @@ $("#cancelNewOperation").addEventListener("click",() => {
 
 // SECTION EDIT OPERATION
 
-$("#editBtnTable").addEventListener("click",() => {
-    $("#edit-operations-section").classList.remove("hidden")
-    hiddenElement(["#balances-section"])
+// $("#editBtnTable").addEventListener("click",() => {
+//     $("#edit-operations-section").classList.remove("hidden")
+//     hiddenElement(["#balances-section"])
+// })
+
+
+
+/* FILTROS */
+//show/hide events
+$("#hide-filters").addEventListener("click", () => {
+    hiddenElement(["#container-filters", "#hide-filters"]);
+    $("#show-filters").classList.remove('hidden')
 })
+
+$("#show-filters").addEventListener("click", () => {
+    $("#show-filters").classList.add('hidden')
+    $("#container-filters").classList.remove('hidden');
+    $("#hide-filters").classList.remove('hidden')
+})
+
+
+//filtro por tipo y categoria
+let filteredOperations = [...operations]
+
+const filterOfTypeAndCategory = () =>{
+    const typeFilter = $("#type-operation-balances-section").value
+    const filteredType = operations.filter((operation) =>{
+        if(typeFilter === "todos"){
+            return operation
+        }
+        return operation.tipo === typeFilter
+    })
+    const categoryFilter = $("#categories-option-filters").value
+    const filter = filteredType.filter((operation)=>{
+        if(categoryFilter === "todas") {
+            return operation
+        }
+        return operation.categoria === categoryFilter
+    })
+    return filter
+}
+
+const renderFilteredOperations = () =>{
+    cleanContainer("#body-table");
+    const filteredOperations = filterOfTypeAndCategory();
+    renderNewOperations(filteredOperations);
+}
+
+$("#type-operation-balances-section").addEventListener("change", () => {
+    renderFilteredOperations()
+    renderNewOperations()
+})
+$("#categories-option-filters").addEventListener("change", () =>{
+    renderFilteredOperations()
+
+})
+
 
 
 //INICIALIZE FUNCTION
@@ -233,6 +294,7 @@ const initializeApp = () => {
 
     setData('categoriesLS', categories);
     categoriesList(categories);
+    //renderNewOperations(operations);
 
     $("#add-btn-category").addEventListener("click", (e) => {
         e.preventDefault()
@@ -246,7 +308,7 @@ const initializeApp = () => {
     $("#edit-btn-category").addEventListener("click", (e) => {
         e.preventDefault()
         const updateEditedCategories = getData('categoriesLS')
-        updateEditedCategories.push(saveNewEditedCategory())
+        //updateEditedCategories.push(saveNewEditedCategory())
         setData('categoriesLS', updateEditedCategories)
         categoriesList(categories)
         confirmEditCategory()
