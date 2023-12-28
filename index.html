@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="shortcut icon" href="./Img/favicon.svg" type="image/x-icon">
     <title>AhorrADAs</title>
-
 </head>
-
 <body class="w-full flex-col bg-slate-100">
     <header class="w-full h-14">
         <nav class="w-full h-14 bg-teal-400 flex items-center p-1 justify-between" id="navbar">
@@ -42,7 +39,7 @@
     </header>
     <main class="flex-col">
         <!--BALANCES SECTION-->
-        <section class="flex flex-col md:flex-row lg:mx-20 lg:my-10 rounded-md my-15" id="balances-section">
+        <section class="flex flex-col md:flex-row lg:mx-0 lg:my-10 rounded-md my-15" id="balances-section">
             <div class="flex-col lg:w-1/4 2xl:w-2/4 md:w-full mx-5">
                 <div class="bg-white border-solid rounded-md my-10 shadow-md shadow-gray-300">
                     <h2 class="text-3xl font-bold p-5">Balance</h2>
@@ -78,7 +75,7 @@
                         </div>
                         <div class="px-5 py-2">
                             <h3 class="font-bold mb-2">Categoria</h3>
-                            <select class="w-full border-solid border-2 border-gray-400 rounded p-2 categories-option"
+                            <select class="w-full border-solid border-2 border-gray-400 rounded p-2 categories-option flex justify-between"
                                 id="categories-option-filters"><!--information obtained from js--></select>
                         </div>
                         <div class="px-5 py-2">
@@ -101,8 +98,8 @@
                 </div>
             </div>
             <div>
-                <div class="flex w-auto lg:w-1/2 lg:mx-auto my-10">
-                    <div class="bg-white border-solid rounded-md  shadow-md shadow-gray-300">
+                <div class=" md:w-full mx-5 my-10">
+                    <div class="bg-white border-solid border slate-900rounded-md shadow-md shadow-gray-300">
                         <h2 class="text-2xl font-bold p-5">Operaciones</h2>
                         <button class="text-white border-none border-2 rounded border-slate-500 bg-teal-400 p-2 ml-4"
                             id="new-operation-btn">+ Nueva operación</button>
@@ -127,23 +124,16 @@
                             </table>
                         </div>
                     </div>
-                </div>
-
-
+               </div>
                 <!-- <div class="no-results container">
             <div class="row">
                 <div> ados.</h3>
                 </div>
             </div>
         </div> -->
-
-
-
-
         </section>
         <!--NEW OPERATION SECTION-->
-        <section id="new-operations-section"
-            class="w-auto lg:w-1/2 lg:mx-auto bg-slate-100 text-slate-600 text-slate-8 my-14 rounded-md shadow-md shadow-gray-300 hidden">
+        <section id="new-operations-section" class="w-auto lg:w-1/2 lg:mx-auto bg-slate-100 text-slate-600 text-slate-8 my-14 rounded-md shadow-md shadow-gray-300 hidden">
             <div class="w-auto bg-white border-solid border-slate-900 rounded-lg mt-8 my-15">
                 <div class="">
                     <h2 class="text-4xl font-bold p-5">Nueva operación</h2>
@@ -185,7 +175,7 @@
                         id="addNewOperation">Agregar</button>
                 </div>
             </div>
-            </div>
+            
         </section>
 
         </section>
@@ -242,7 +232,7 @@
             class="w-auto lg:w-1/2 bg-white text-slate-600 lg:mx-auto mx-4 my-28 p-4 rounded-md shadow-md shadow-300 hidden">
             <div id="contenedor de la vista" class="justify-center p-4">
                 <h2 class="title-category title font-bold text-3xl  my-5">Categorías</h2>
-                <form id="category-form" class="flex flex-col justify-center my-10">
+                <form id="category-form" class="flex flex-col my-10">
                     <div>
                         <div class="my-2">
                             <label for="input-add-category" class="font-medium text-xl">Nombre</label>
@@ -256,8 +246,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex w-auto lg:w-1/2 pt-6 text-xs">
-                        <ul id="categories-list" class="flex flex-col justify-between m-2 text-cyan-600">
+                    <div class="flex pt-6 text-xs w-full">
+                        <ul id="categories-list" class="flex flex-col m-2 text-cyan-600">
                             <!--information obtained from js-->
                         </ul>
                     </div>

@@ -43,14 +43,14 @@ $("#btn-options-nav").addEventListener("click", () => {
     $("#btn-options-nav").classList.add('hidden')
     $("#btn-cruz-options").classList.remove('hidden')
     $("#navbar-btn").classList.remove('hidden')
-    $("#navbar-btn").classList.add("fixed","top-19","right-0","mt-8","shadow-md","shadow-gray-300", "rounded-md")
+    $("#navbar-btn").classList.add("fixed", "top-19", "right-0", "mt-8", "shadow-md", "shadow-gray-300", "rounded-md")
 })
 
 $("#btn-cruz-options").addEventListener("click", () => {
     $("#btn-cruz-options").classList.add("hidden")
     $("#navbar-btn").classList.add("hidden")
     $("#btn-options-nav").classList.remove('hidden')
-    $("#navbar-btn").classList.remove("fixed","top-19","right-0","mt-8","shadow-md","shadow-gray-300","rounded-md")
+    $("#navbar-btn").classList.remove("fixed", "top-19", "right-0", "mt-8", "shadow-md", "shadow-gray-300", "rounded-md")
 })
 
 
@@ -95,11 +95,13 @@ const categoriesList = (categories) => {
     if (Array.isArray(categories) && categories !== undefined && categories !== null) {
         for (const category of categories) {
             $("#categories-list").innerHTML += `
-                <li class="m-2 p-0.5 bg-emerald-100" value="${category.categoryName}">${category.categoryName}</li>
-                <div class="flex ">
+            <div class="flex justify-between">
+                <li class="m-2 p-0.5 bg-emerald-100  inset-y-0 left-0" value="${category.categoryName}">${category.categoryName}</li>
+                <div class="flex inset-y-0 right-0">
                 <button type="button" class="m-2 text-sky-700 mx-1 w-win edit-categories" onclick="viewEditCategory('${category.id}')">Editar</button>
                 <button type="button" class="m-2 text-sky-700 mx-1 w-win delete-categories" onclick="deleteCategory('${category.id}')">Eliminar</button>
                 </div>
+            </div>
             `
             $("#categories-option-filters").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
             $("#categories-option-operations").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
@@ -180,61 +182,56 @@ const operations = getData("operationsLS") || []
 
 // RENDERS
 const renderNewOperations = (operations) => {
-    for (const operation of operations) {
-        $("#body-table").innerHTML += `
+    //if (Array.isArray(operations) && operations !== undefined && operations !== null) {
+        for (const operation of operations) {
+            $("#body-table").innerHTML += `
         <tr>
-        <td>${operation.Descripcion}</td>
-        <td>${operation.Categoria}</td>
-        <td>${operation.Fecha}</td>
-        <td>${operation.Monto}</td>
+        <td>${operation.descripcion}</td>
+        <td>${operation.categoria}</td>
+        <td>${operation.fecha}</td>
+        <td>${operation.monto}</td>
         <td>
         <button class="text-blue-300" id="editBtnTable">Editar</button>
         <button class="text-blue-300" id="deleteBtnTable">Eliminar</button>        
         </td>          
         </tr>  
         `
-    }
+        }
+    //}
 }
 
 const saveNewOperation = () => {
     return {
-        id:randomId(),
-        Descripcion: $("#description").value,
-        Categoria:$("#categories-option-operations").value,
-        Fecha:$("#date").value,
-        Monto:$("#amount").value
+        id: randomId(),
+        descripcion: $("#description").value,
+        categoria: $("#categories-option-operations").value,
+        fecha: $("#date").value,
+        monto: $("#amount").value
     }
 }
 
 // EVENTS
 
-setData("operationsLS",operations);
-renderNewOperations(operations);
-        
-    
+setData("operationsLS", operations);
+
+
 
 $("#addNewOperation").addEventListener("click", (e) => {
     e.preventDefault()
     hiddenElement(["#new-operations-section", "#no-results"])
-    $("#balances-section").classList.remove("hidden")  
+    $("#balances-section").classList.remove("hidden")
     $("#table").classList.remove("hidden")
     const currentData = getData("operationsLS")
     currentData.push(saveNewOperation())
-    setData("operationsLS",currentData)
+    setData("operationsLS", currentData)
     renderNewOperations()
 })
 
-$("#cancelNewOperation").addEventListener("click",() => {  
-    hiddenElement(["#new-operations-section"])  
-    $("#balances-section").classList.remove("hidden")  
-}) 
+$("#cancelNewOperation").addEventListener("click", () => {
+    hiddenElement(["#new-operations-section"])
+    $("#balances-section").classList.remove("hidden")
+})
 
-// SECTION EDIT OPERATION
-
-// $("#editBtnTable").addEventListener("click",() => {
-//     $("#edit-operations-section").classList.remove("hidden")
-//     hiddenElement(["#balances-section"])
-// })
 
 
 
@@ -254,26 +251,26 @@ $("#show-filters").addEventListener("click", () => {
 
 //filtro por tipo y categoria
 let filteredOperations = [...operations]
-
-const filterOfTypeAndCategory = () =>{
+console.log(filteredOperations)
+const filterOfTypeAndCategory = () => {
     const typeFilter = $("#type-operation-balances-section").value
-    const filteredType = operations.filter((operation) =>{
-        if(typeFilter === "todos"){
+    const filteredType = operations.filter((operation) => {
+        if (typeFilter === "todos") {
             return operation
         }
         return operation.tipo === typeFilter
     })
     const categoryFilter = $("#categories-option-filters").value
-    const filter = filteredType.filter((operation)=>{
-        if(categoryFilter === "todas") {
+    const filter = filteredType.filter((operation) => {
+        if (categoryFilter === "todas") {
             return operation
         }
-        return operation.categoria === categoryFilter
+        return operation.Categoria === categoryFilter
     })
     return filter
 }
 
-const renderFilteredOperations = () =>{
+const renderFilteredOperations = () => {
     cleanContainer("#body-table");
     const filteredOperations = filterOfTypeAndCategory();
     renderNewOperations(filteredOperations);
@@ -281,21 +278,18 @@ const renderFilteredOperations = () =>{
 
 $("#type-operation-balances-section").addEventListener("change", () => {
     renderFilteredOperations()
-    renderNewOperations()
 })
-$("#categories-option-filters").addEventListener("change", () =>{
+$("#categories-option-filters").addEventListener("change", () => {
     renderFilteredOperations()
-
 })
 
 
 
 //INICIALIZE FUNCTION
-const initializeApp = () => {  
-
+const initializeApp = () => {
     setData('categoriesLS', categories);
     categoriesList(categories);
-    //renderNewOperations(operations);
+    renderNewOperations(operations);
 
     $("#add-btn-category").addEventListener("click", (e) => {
         e.preventDefault()
@@ -316,3 +310,11 @@ const initializeApp = () => {
     })
 }
 window.addEventListener("load", initializeApp)
+
+
+// SECTION EDIT OPERATION
+
+// $("#editBtnTable").addEventListener("click", () => {
+//     $("#edit-operations-section").classList.remove("hidden")
+//     hiddenElement(["#balances-section"])
+// })
