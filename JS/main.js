@@ -57,36 +57,35 @@ $("#btn-cruz-options").addEventListener("click", () => {
 /* CATEGORIAS */
 const categoriesListDefault = [
     {
-        categoryName: 'Todas',
+        categoryName: 'Comidas',
         id: randomId(),
     },
     {
-        categoryName: 'comidas',
+        categoryName: 'Servicios',
         id: randomId(),
     },
     {
-        categoryName: 'servicios',
+        categoryName: 'Salidas',
         id: randomId(),
     },
     {
-        categoryName: 'salidas',
+        categoryName: 'Educación',
         id: randomId(),
     },
     {
-        categoryName: 'educación',
+        categoryName: 'Transporte',
         id: randomId(),
     },
     {
-        categoryName: 'transporte',
-        id: randomId(),
-    },
-    {
-        categoryName: 'trabajo',
+        categoryName: 'Trabajo',
         id: randomId(),
     }
 ];
 
 const categories = getData("categoriesLS") || categoriesListDefault
+
+
+
 
 const categoriesList = (categories) => {
     cleanContainer("#categories-list")
@@ -103,7 +102,8 @@ const categoriesList = (categories) => {
                 </div>
             </div>
             `
-            $("#categories-option-filters").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
+            $("#categories-option-filters").innerHTML += `
+            <option value="${category.categoryName}">${category.categoryName}</option>`
             $("#categories-option-operations").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
         }
     }
@@ -182,8 +182,9 @@ const operations = getData("operationsLS") || []
 
 // RENDERS
 const renderNewOperations = (operations) => {
-    //if (Array.isArray(operations) && operations !== undefined && operations !== null) {
+    if (Array.isArray(operations) && operations !== undefined && operations !== null) {
         for (const operation of operations) {
+            //cleanContainer("#body-table")
             $("#body-table").innerHTML += `
         <tr>
         <td>${operation.descripcion}</td>
@@ -197,16 +198,17 @@ const renderNewOperations = (operations) => {
         </tr>  
         `
         }
-    //}
+    }
 }
 
 const saveNewOperation = () => {
     return {
         id: randomId(),
-        descripcion: $("#description").value,
+        descripcion: $("#description-new-op").value,
         categoria: $("#categories-option-operations").value,
         fecha: $("#date").value,
-        monto: $("#amount").value
+        monto: $("#amount").value,
+        tipo: $("#type-new-operation").value
     }
 }
 
@@ -214,10 +216,8 @@ const saveNewOperation = () => {
 
 setData("operationsLS", operations);
 
-
-
-$("#addNewOperation").addEventListener("click", (e) => {
-    e.preventDefault()
+$("#addNewOperation").addEventListener("click", () => {
+    //e.preventDefault()
     hiddenElement(["#new-operations-section", "#no-results"])
     $("#balances-section").classList.remove("hidden")
     $("#table").classList.remove("hidden")
@@ -225,14 +225,13 @@ $("#addNewOperation").addEventListener("click", (e) => {
     currentData.push(saveNewOperation())
     setData("operationsLS", currentData)
     renderNewOperations()
+    window.location.reload()
 })
 
 $("#cancelNewOperation").addEventListener("click", () => {
     hiddenElement(["#new-operations-section"])
     $("#balances-section").classList.remove("hidden")
 })
-
-
 
 
 /* FILTROS */
@@ -248,40 +247,85 @@ $("#show-filters").addEventListener("click", () => {
     $("#hide-filters").classList.remove('hidden')
 })
 
+//filtro POR TIPO Y CATEGORIA
+//let filteredOperations = [...operations]
+const filterOperations = () => {
+    let filteredOperations = operations;
 
-//filtro por tipo y categoria
-let filteredOperations = [...operations]
-console.log(filteredOperations)
-const filterOfTypeAndCategory = () => {
-    const typeFilter = $("#type-operation-balances-section").value
-    const filteredType = operations.filter((operation) => {
-        if (typeFilter === "todos") {
-            return operation
-        }
-        return operation.tipo === typeFilter
-    })
-    const categoryFilter = $("#categories-option-filters").value
-    const filter = filteredType.filter((operation) => {
-        if (categoryFilter === "todas") {
-            return operation
-        }
-        return operation.Categoria === categoryFilter
-    })
-    return filter
-}
 
-const renderFilteredOperations = () => {
-    cleanContainer("#body-table");
-    const filteredOperations = filterOfTypeAndCategory();
+    // Aplicar filtros según el tipo
+    switch ($("#type-operation-balances-section").value) {
+        case "all": 
+            operations;
+            break;
+        case "spent":
+            filteredOperations = filteredOperations.filter(operation => operation.tipo === "spent");
+            break;
+        case "revenue":
+            filteredOperations = filteredOperations.filter(operation => operation.tipo === "revenue");
+            break;
+        default: 
+            operations;
+    }
+
+    // Aplicar filtros según la categoría
+    if($("#categories-option-filters").value === "todas"){
+         filteredOperations;
+    } 
+    else if($("#categories-option-filters").value !== "") {
+        filteredOperations = filteredOperations.filter(operation => operation.categoria === $("#categories-option-filters").value);
+    }
+    // Aplicar filtros según la fecha
+    if ($("#from-input").value !== "") {
+        filteredOperations = filteredOperations.filter(operation => new Date(operation.fecha) >= new Date($("#from-input").value));
+    }
+
+    // Ordenar según el criterio seleccionado
+    switch ($("#sort-by-select").value) {
+        case "recent":
+            filteredOperations.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+            break
+        case "least-recent":
+            filteredOperations.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+            break
+        case "highest-amount":
+            filteredOperations.sort((a, b) => b.monto - a.monto);
+            break
+        case "lowest-amount":
+            filteredOperations.sort((a, b) => a.monto - b.monto);
+            break
+        case "a-to-z":
+            filteredOperations.sort((a, b) => a.descripcion- b.descripcion);
+            break
+        case "z-to-a":
+            filteredOperations.sort((b, a) => b.descripcion - a.descripcion);
+            break
+        default: 
+        filteredOperations.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+    }
+
     renderNewOperations(filteredOperations);
-}
+};
 
-$("#type-operation-balances-section").addEventListener("change", () => {
-    renderFilteredOperations()
+$("#type-operation-balances-section").addEventListener("change", () =>{
+    cleanContainer("#body-table");
+    filterOperations()
 })
-$("#categories-option-filters").addEventListener("change", () => {
-    renderFilteredOperations()
-})
+$("#categories-option-filters").addEventListener("change", () =>{
+    cleanContainer("#body-table");
+    filterOperations()
+});
+
+$("#from-input").addEventListener("change", () => {
+    cleanContainer("#body-table");
+    filterOperations()
+});
+$("#sort-by-select").addEventListener("change", () => {
+    cleanContainer("#body-table");
+    filterOperations()
+});
+
+
 
 
 
@@ -290,6 +334,7 @@ const initializeApp = () => {
     setData('categoriesLS', categories);
     categoriesList(categories);
     renderNewOperations(operations);
+    $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`
 
     $("#add-btn-category").addEventListener("click", (e) => {
         e.preventDefault()
@@ -303,18 +348,11 @@ const initializeApp = () => {
     $("#edit-btn-category").addEventListener("click", (e) => {
         e.preventDefault()
         const updateEditedCategories = getData('categoriesLS')
-        //updateEditedCategories.push(saveNewEditedCategory())
+        updateEditedCategories.push(saveNewEditedCategory())
         setData('categoriesLS', updateEditedCategories)
         categoriesList(categories)
         confirmEditCategory()
     })
 }
-window.addEventListener("load", initializeApp)
+window.addEventListener("load", initializeApp())
 
-
-// SECTION EDIT OPERATION
-
-// $("#editBtnTable").addEventListener("click", () => {
-//     $("#edit-operations-section").classList.remove("hidden")
-//     hiddenElement(["#balances-section"])
-// })
