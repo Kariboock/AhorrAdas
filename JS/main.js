@@ -225,12 +225,14 @@ $("#addNewOperation").addEventListener("click", () => {
     currentData.push(saveNewOperation())
     setData("operationsLS", currentData)
     renderNewOperations()
+    renderBalance()
     window.location.reload()
 })
 
 $("#cancelNewOperation").addEventListener("click", () => {
     hiddenElement(["#new-operations-section"])
     $("#balances-section").classList.remove("hidden")
+    renderBalance()
 })
 
 
@@ -248,14 +250,13 @@ $("#show-filters").addEventListener("click", () => {
 })
 
 //filtro POR TIPO Y CATEGORIA
-//let filteredOperations = [...operations]
 const filterOperations = () => {
     let filteredOperations = operations;
 
 
     // Aplicar filtros según el tipo
     switch ($("#type-operation-balances-section").value) {
-        case "all": 
+        case "all":
             operations;
             break;
         case "spent":
@@ -264,15 +265,15 @@ const filterOperations = () => {
         case "revenue":
             filteredOperations = filteredOperations.filter(operation => operation.tipo === "revenue");
             break;
-        default: 
+        default:
             operations;
     }
 
     // Aplicar filtros según la categoría
-    if($("#categories-option-filters").value === "todas"){
-         filteredOperations;
-    } 
-    else if($("#categories-option-filters").value !== "") {
+    if ($("#categories-option-filters").value === "todas") {
+        filteredOperations;
+    }
+    else if ($("#categories-option-filters").value !== "") {
         filteredOperations = filteredOperations.filter(operation => operation.categoria === $("#categories-option-filters").value);
     }
     // Aplicar filtros según la fecha
@@ -295,45 +296,63 @@ const filterOperations = () => {
             filteredOperations.sort((a, b) => a.monto - b.monto);
             break
         case "a-to-z":
-            filteredOperations.sort((a, b) => a.descripcion- b.descripcion);
+            filteredOperations.sort((a, b) => a.descripcion - b.descripcion);
             break
         case "z-to-a":
             filteredOperations.sort((b, a) => b.descripcion - a.descripcion);
             break
-        default: 
-        filteredOperations.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+        default:
+            filteredOperations.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
     }
 
     renderNewOperations(filteredOperations);
+    renderBalance(filteredOperations)
 };
 
-$("#type-operation-balances-section").addEventListener("change", () =>{
-    cleanContainer("#body-table");
-    filterOperations()
-})
-$("#categories-option-filters").addEventListener("change", () =>{
-    cleanContainer("#body-table");
-    filterOperations()
-});
-
-$("#from-input").addEventListener("change", () => {
-    cleanContainer("#body-table");
-    filterOperations()
-});
-$("#sort-by-select").addEventListener("change", () => {
-    cleanContainer("#body-table");
-    filterOperations()
-});
 
 
+//BALANCES
+const balanceCostProfit = (array, tipo) => {
 
+    const filterOperation = array.filter((arr) => {
+        return arr.tipo === tipo && arr
+    })
+    const spent = filterOperation.reduce((acc, arr) => {
+        return acc + Number(arr.monto)
+    }, 0)
+    return spent
+}
 
+const totalBalance = balanceCostProfit(operations, "revenue") - balanceCostProfit(operations, "spent")
+
+const updatedBalance = () => {
+    $("#total-profit").innerHTML = `+$${balanceCostProfit(operations, "revenue")}`
+    $("#total-cost").innerHTML = `+$${balanceCostProfit(operations, "spent")}`
+    $("#total").innerHTML = `$${totalBalance}`
+}
+
+const resetBalance = () => {
+    $("#total-profit").innerHTML = `+$0`
+    $("#total-cost").innerHTML = `+$0`
+    $("#total").innerHTML = `$0`
+}
+
+const renderBalance = () => {
+    if(getData("operationsLS") === "[]"){
+        resetBalance()
+    }
+    else {
+        updatedBalance()
+    }
+}
+//renderBalance()
 
 //INICIALIZE FUNCTION
 const initializeApp = () => {
     setData('categoriesLS', categories);
     categoriesList(categories);
     renderNewOperations(operations);
+    renderBalance(operations)
     $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`
 
     $("#add-btn-category").addEventListener("click", (e) => {
@@ -356,3 +375,24 @@ const initializeApp = () => {
 }
 window.addEventListener("load", initializeApp())
 
+$("#type-operation-balances-section").addEventListener("change", () => {
+    cleanContainer("#body-table");
+    filterOperations()
+    renderBalance()
+})
+$("#categories-option-filters").addEventListener("change", () => {
+    cleanContainer("#body-table");
+    filterOperations()
+    renderBalance()
+});
+
+$("#from-input").addEventListener("change", () => {
+    cleanContainer("#body-table");
+    filterOperations()
+    renderBalance()
+});
+$("#sort-by-select").addEventListener("change", () => {
+    cleanContainer("#body-table");
+    filterOperations()
+    renderBalance()
+});
