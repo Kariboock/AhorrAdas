@@ -180,91 +180,83 @@ $("#boton-cancelar-editar-categoria").onclick = () => {
 const operations = getData("operationsLS") || []
 
 // RENDERS
-<<<<<<< HEAD
-const renderNewOperations = (operationsLS) => {
-    for (const operation of operationsLS) {
-        $("#body-table").innerHTML += `
-=======
 const renderNewOperations = (operations) => {
     if (Array.isArray(operations) && operations !== undefined && operations !== null) {
         for (const operation of operations) {
             //cleanContainer("#body-table")
             $("#body-table").innerHTML += `
->>>>>>> 65dd8bad73c5266605c68d6484451cef8ae799a3
+        <div class="w-full flex justify-items-center p-3">
         <tr>
-        <td>${operation.descripcion}</td>
-        <td>${operation.categoria}</td>
-        <td>${operation.fecha}</td>
-        <td>${operation.monto}</td>
-        <td>
-        <button class="text-blue-300" id="editBtnTable">Editar</button>
-        <button class="text-blue-300" id="deleteBtnTable">Eliminar</button>        
-        </td>          
-        </tr>  
-<<<<<<< HEAD
-        ` 
-=======
+        <td class="font-bold pl-9">${operation.descripcion}</td>
+        <td class="border-none border-2 rounded border-slate-500 bg-emerald-100 pl-8">${operation.categoria}</td>
+        <td class="pl-8">${operation.fecha}</td>
+        <td class="pl-7">$${operation.monto}</td> 
+        <td class="pl-7">            
+        <div"><button class="text-blue-400" onclick="showSectionEdit('${operation.id}')">Editar</button></div>
+        <div><button class="text-blue-400" id="deleteBtnTable">Eliminar</button></div>  
+        </td>                
+        </tr> 
         `
         }
->>>>>>> 65dd8bad73c5266605c68d6484451cef8ae799a3
     }
 }
 
 const saveNewOperation = () => {
     return {
-<<<<<<< HEAD
-        id:randomId(),
-        descripcion: $("#description").value,
-        categoria:$("#categories-option-operations").value,
-        fecha:$("#date").value,
-        monto:$("#amount").valueAsNumber,
-=======
         id: randomId(),
         descripcion: $("#description-new-op").value,
         categoria: $("#categories-option-operations").value,
         fecha: $("#date").value,
         monto: $("#amount").value,
         tipo: $("#type-new-operation").value
->>>>>>> 65dd8bad73c5266605c68d6484451cef8ae799a3
     }
 }
 
+const showSectionEdit = (operationId) => {
+    $("#balances-section").classList.add("hidden")
+    $("#edit-operations-section").classList.remove("hidden")
+    console.log("operationid-----",operationId);
+    
+     const operationSelected = getData ("operationsLS").find(operations => operation.id === operationId)
+     console.log("operationSelected-----",operationSelected);
+     $("#description").value = operationSelected.descripcion
+     $("#categoria").value = operationSelected.categoria
+     $("#fecha").value = operationSelected.fecha
+     $("#monto").value = operationSelected.monto
+}
+
+
 // EVENTS
-<<<<<<< HEAD
-  
-
-$("#cancelNewOperation").addEventListener("click",() => {  
-    $("#new-operations-section").classList.add("hidden")  
-    $("#balances-section").classList.remove("hidden")  
-}) 
-
-
-
-
-
-=======
 
 setData("operationsLS", operations);
 
 $("#addNewOperation").addEventListener("click", () => {
-    //e.preventDefault()
+    e.preventDefault()
     hiddenElement(["#new-operations-section", "#no-results"])
     $("#balances-section").classList.remove("hidden")
     $("#table").classList.remove("hidden")
     const currentData = getData("operationsLS")
     currentData.push(saveNewOperation())
     setData("operationsLS", currentData)
-    renderNewOperations()
+    renderNewOperations()    
     renderBalance()
-    window.location.reload()
+    window.location.reload() 
+   
 })
 
 $("#cancelNewOperation").addEventListener("click", () => {
-    hiddenElement(["#new-operations-section"])
+    $("#new-operations-section").classList.add("hidden")
     $("#balances-section").classList.remove("hidden")
     renderBalance()
 })
->>>>>>> 65dd8bad73c5266605c68d6484451cef8ae799a3
+
+$("#canceleditOperation").addEventListener("click", () => {
+    $("#edit-operations-section").classList.add("hidden")
+    $("#balances-section").classList.remove("hidden")
+    renderBalance()
+})
+
+
 
 
 /* FILTROS */
@@ -381,14 +373,10 @@ const renderBalance = () => {
 //INICIALIZE FUNCTION
 const initializeApp = () => {
     setData('categoriesLS', categories);
-<<<<<<< HEAD
-    categoriesList(categories); 
-=======
     categoriesList(categories);
     renderNewOperations(operations);
     renderBalance(operations)
     $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`
->>>>>>> 65dd8bad73c5266605c68d6484451cef8ae799a3
 
     $("#add-btn-category").addEventListener("click", (e) => {
         e.preventDefault()
@@ -419,19 +407,9 @@ const initializeApp = () => {
         const currentData = getData("operationsLS")
         currentData.push(saveNewOperation())
         setData("operationsLS",currentData)      
+        window.location.reload()
     })     
 }
-<<<<<<< HEAD
-
-window.addEventListener("load", initializeApp)
-
-// SECTION EDIT OPERATION
-
-// $("#editBtnTable").addEventListener("click",() => {
-//     $("#edit-operations-section").classList.remove("hidden")
-//     hiddenElement(["#balances-section"])
-// })
-=======
 window.addEventListener("load", initializeApp())
 
 $("#type-operation-balances-section").addEventListener("change", () => {
@@ -455,4 +433,4 @@ $("#sort-by-select").addEventListener("change", () => {
     filterOperations()
     renderBalance()
 });
->>>>>>> 65dd8bad73c5266605c68d6484451cef8ae799a3
+
