@@ -14,7 +14,6 @@ const hiddenElement = (selectors) => {
     }
 }
 
-const cleanContainer = (selector) => $(selector).innerHTML = ""
 
 /* Nav events */
 $("#balance-btn-nav").addEventListener('click', () => {
@@ -87,13 +86,12 @@ const categories = getData("categoriesLS") || categoriesListDefault
 
 
 
+
 const categoriesList = (categories) => {
-    cleanContainer("#categories-list")
-    cleanContainer("#categories-option-filters")
-    cleanContainer("#categories-option-operations")
-    if (Array.isArray(categories) && categories !== undefined && categories !== null) {
-        for (const category of categories) {
-            $("#categories-list").innerHTML += `
+    //if (Array.isArray(categories) && categories !== undefined && categories !== null) {
+    //cleanContainer("#categories-list", "#categories-option-filters", "#categories-option-operations")
+    for (const category of categories) {
+        $("#categories-list").innerHTML += `
             <div class="flex justify-between">
                 <li class="m-2 p-0.5 bg-emerald-100  inset-y-0 left-0" value="${category.categoryName}">${category.categoryName}</li>
                 <div class="flex inset-y-0 right-0">
@@ -102,14 +100,13 @@ const categoriesList = (categories) => {
                 </div>
             </div>
             `
-            $("#categories-option-filters").innerHTML += `
+        $("#categories-option-filters").innerHTML += `
             <option value="${category.categoryName}">${category.categoryName}</option>`
-            $("#categories-option-operations").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
-        }
+        $("#categories-option-operations").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
     }
+    // }
 }
-categoriesList(categories)
-
+//setData("categoriesLS", categories);
 
 //delete category
 const deleteCategory = (categoryId) => {
@@ -118,9 +115,10 @@ const deleteCategory = (categoryId) => {
             const croppedId = $$('.delete-categories')[i].id.slice(20)
             numberId = Number(croppedId)
             const filteredCategories = categories.filter(category => category.id != categoryId)
-            setData('categoriesLS', filteredCategories);
-            categoriesList(categories)
             deleteCategory(categoryId)
+            setData('categoriesLS', filteredCategories);
+            getData(categories)
+            categoriesList(categories)
             window.location.reload(["#categories-list", "#categories-option-filters", "#categories-option-operations"])
         }
     }
@@ -146,9 +144,6 @@ const confirmEditCategory = () => {
         }
         return category;
     });
-
-    setData('categoriesLS', updatedCategories);
-    categoriesList(updatedCategories);
 }
 
 //add category 
@@ -173,7 +168,22 @@ $("#boton-cancelar-editar-categoria").onclick = () => {
     $("#category-section").classList.remove('hidden')
 }
 
+$("#add-btn-category").addEventListener("click", () => {
+    const updatedCategories = getData('categoriesLS')
+    updatedCategories.push(saveNewCategory())
+    setData('categoriesLS', updatedCategories)
+    getData(categories)
+    categoriesList(categories)
+})
 
+$("#edit-btn-category").addEventListener("click", () => {
+    const updatedEditedCategories = getData('categoriesLS')
+    updatedEditedCategories.push(saveNewEditedCategory())
+    setData('categoriesLS', updatedEditedCategories)
+    getData(categories)
+    confirmEditCategory()
+    categoriesList(categories);
+})
 
 
 // Funciones Kari
@@ -184,19 +194,17 @@ const operations = getData("operationsLS") || []
 const renderNewOperations = (operations) => {
     if (Array.isArray(operations) && operations !== undefined && operations !== null) {
         for (const operation of operations) {
-            //cleanContainer("#body-table")
-            $("#body-table").innerHTML += `
-        <tr>
-        <td>${operation.descripcion}</td>
-        <td>${operation.categoria}</td>
-        <td>${operation.fecha}</td>
-        <td>${operation.monto}</td>
-        <td>
-        <button class="text-blue-300" id="editBtnTable">Editar</button>
-        <button class="text-blue-300" id="deleteBtnTable">Eliminar</button>        
-        </td>          
-        </tr>  
-        `
+            $("#body-table").innerHTML +=
+                `<tr>
+                <td>${operation.descripcion}</td>
+                <td>${operation.categoria}</td>
+                <td>${operation.fecha}</td>
+                <td>${operation.monto}</td>
+                <td>
+                <button class="text-blue-300" id="editBtnTable">Editar</button>
+                <button class="text-blue-300" id="deleteBtnTable">Eliminar</button>        
+                </td>          
+                </tr>`
         }
     }
 }
@@ -226,6 +234,7 @@ $("#addNewOperation").addEventListener("click", () => {
     setData("operationsLS", currentData)
     renderNewOperations()
     renderBalance()
+    //summaryReports()
     window.location.reload()
 })
 
@@ -252,7 +261,6 @@ $("#show-filters").addEventListener("click", () => {
 //filtro POR TIPO Y CATEGORIA
 const filterOperations = () => {
     let filteredOperations = operations;
-
 
     // Aplicar filtros según el tipo
     switch ($("#type-operation-balances-section").value) {
@@ -327,7 +335,7 @@ const totalBalance = balanceCostProfit(operations, "revenue") - balanceCostProfi
 
 const updatedBalance = () => {
     $("#total-profit").innerHTML = `+$${balanceCostProfit(operations, "revenue")}`
-    $("#total-cost").innerHTML = `+$${balanceCostProfit(operations, "spent")}`
+    $("#total-cost").innerHTML = `-$${balanceCostProfit(operations, "spent")}`
     $("#total").innerHTML = `$${totalBalance}`
 }
 
@@ -338,61 +346,110 @@ const resetBalance = () => {
 }
 
 const renderBalance = () => {
-    if(getData("operationsLS") === "[]"){
+    if (getData("operationsLS") === "[]") {
         resetBalance()
     }
     else {
         updatedBalance()
     }
 }
-//renderBalance()
+
+//REPORTES
+const currentCategories = getData(categories)
+const currentOperations = getData("operationsLS")
+
+const categoriesWhiteOperations = () => {
+
+    const categoriesWhiteOp = currentCategories.map(category => {
+        const operationForCategory = currentOperations.filter(operation => operation.categoria === category);
+        //acumuladores
+        let spentAcc = 0;
+        let revenueAcc = 0;
+
+        operationForCategory.forEach(operation => {
+            if (operation.tipo === "revenue") {
+                revenueAcc += parseInt(operation.monto);
+            }
+            if (operation.tipo === "spent") {
+                spentAcc += parseInt(operation.monto);
+            }
+
+        });
+
+        return {
+            name: category,
+            revenue: revenueAcc,
+            spent: spentAcc,
+            balance: revenueAcc - spentAcc,
+        };
+    });
+    return categoriesWhiteOp;
+}
+
+
+// const order = [...categoriesWhiteOperations()];
+// const summary = (categoriesWhiteOp) => {
+//     order.sort((a, b) => b[categoriesWhiteOp] - a[element]);
+//     return order[0];
+// }
+
+const summaryReports = (operationsLS) => {
+    if (operationsLS.length > 1) {
+        $("#no-reports-container").classList.add("hidden");
+        $("#summary-container").classList.remove("hidden");
+
+        $("#highest-earning-category-name").innerHTML = `${summary("revenue").name.categoryName}`;
+        $("#highest-earning-category-amount").innerHTML = ` +$${summary("revenue").revenue}`;
+        $("#highest-spending-category-name").innerHTML = `${summary("spent").name.categoryName}`;
+        $("#highest-spending-category-amount").innerHTML = `-$${summary("spent").spent}`;
+        $("#highest-balance-category-name").innerHTML = `${summary("balance").name.categoryName}`;
+        $("#highest-balance-category-amount").innerHTML = `$${summary("balance").balance}`;
+    }
+}
+
+
+// console.log(summary("revenue"));
 
 //INICIALIZE FUNCTION
 const initializeApp = () => {
     setData('categoriesLS', categories);
+    setData('operationsLS', operations);
     categoriesList(categories);
     renderNewOperations(operations);
-    renderBalance(operations)
+    renderBalance();
+    //summaryReports(operations);
     $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`
 
-    $("#add-btn-category").addEventListener("click", (e) => {
-        e.preventDefault()
-        const updateCategories = getData('categoriesLS')
-        updateCategories.push(saveNewCategory())
-        setData('categoriesLS', updateCategories)
-        categoriesList(categories)
-        window.location.reload()
-    })
+    if (operations.length >= 1) {
+        $("#no-results").classList.add("hidden");
+        $("#table").classList.remove("hidden");
+    }
 
-    $("#edit-btn-category").addEventListener("click", (e) => {
-        e.preventDefault()
-        const updateEditedCategories = getData('categoriesLS')
-        updateEditedCategories.push(saveNewEditedCategory())
-        setData('categoriesLS', updateEditedCategories)
-        categoriesList(categories)
-        confirmEditCategory()
-    })
+    if (operations.length > 1) {
+        $("#no-reports-container").classList.add("hidden");
+        $("#summary-container").classList.remove("hidden");
+    }
 }
-window.addEventListener("load", initializeApp())
 
 $("#type-operation-balances-section").addEventListener("change", () => {
-    cleanContainer("#body-table");
+    $("#body-table").innerHTML = "";
     filterOperations()
     renderBalance()
 })
 $("#categories-option-filters").addEventListener("change", () => {
-    cleanContainer("#body-table");
+    $("#body-table").innerHTML = "";
     filterOperations()
     renderBalance()
 });
 
 $("#from-input").addEventListener("change", () => {
-    cleanContainer("#body-table");
+    $("#body-table").innerHTML = "";
     filterOperations()
     renderBalance()
 });
 $("#sort-by-select").addEventListener("change", () => {
-    cleanContainer("#body-table");
+    $("#body-table").innerHTML = "";
     filterOperations()
     renderBalance()
 });
+window.addEventListener("load", initializeApp())
