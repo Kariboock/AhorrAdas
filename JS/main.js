@@ -105,6 +105,7 @@ const categoriesList = (categories) => {
             $("#categories-option-filters").innerHTML += `
             <option value="${category.categoryName}">${category.categoryName}</option>`
             $("#categories-option-operations").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
+            $("#categories-option-operations-edit").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
         }
     }
 }
@@ -213,16 +214,16 @@ const saveNewOperation = () => {
 }
 
 const showSectionEdit = (operationId) => {
-    $("#balances-section").classList.add("hidden")
-    $("#edit-operations-section").classList.remove("hidden")
-    console.log("operationid-----",operationId);
+    $("#balances-section").classList.add("hidden");
+    $("#edit-operations-section").classList.remove("hidden");
+    console.log("operationid----->",operationId);
     
-     const operationSelected = getData ("operationsLS").find(operations => operation.id === operationId)
+     const operationSelected = getData ("operationsLS").find(operations => operations.id === operationId);
      console.log("operationSelected-----",operationSelected);
-     $("#description").value = operationSelected.descripcion
-     $("#categoria").value = operationSelected.categoria
-     $("#fecha").value = operationSelected.fecha
-     $("#monto").value = operationSelected.monto
+     $("#description-edit-op").value = operationSelected.descripcion;
+     $("#categories-option-operations-edit").value = operationSelected.categoria;
+     $("#dateEdit").value = operationSelected.fecha;
+     $("#amountEdit").value = operationSelected.monto;
 }
 
 
