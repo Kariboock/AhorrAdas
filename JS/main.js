@@ -79,6 +79,10 @@ const categoriesListDefault = [
     {
         categoryName: 'Trabajo',
         id: randomId(),
+    },
+	{
+        categoryName: 'Todas',
+        id: randomId(),
     }
 ];
 
@@ -109,7 +113,7 @@ const categoriesList = (categories) => {
         }
     }
 }
-categoriesList(categories)
+
 
 
 //delete category
@@ -159,7 +163,7 @@ const saveNewCategory = () => {
         id: randomId(),
     }
 }
-setData('categoriesLS', saveNewCategory())
+
 
 const saveNewEditedCategory = () => {
     return {
@@ -167,7 +171,7 @@ const saveNewEditedCategory = () => {
         id: randomId(),
     }
 }
-setData('categoriesLS', saveNewEditedCategory())
+
 
 $("#boton-cancelar-editar-categoria").onclick = () => {
     hiddenElement(["#category-edit-section", "#new-operations-section", "#reports-section", "#balances-section"]);
@@ -194,7 +198,7 @@ const renderNewOperations = (operations) => {
         <td class="pl-7">$${operation.monto}</td> 
         <td class="pl-7">            
         <div"><button class="text-blue-400" onclick="showSectionEdit('${operation.id}')">Editar</button></div>
-        <div><button class="text-blue-400" id="deleteBtnTable">Eliminar</button></div>  
+        <div><button class="text-blue-400" onclick="deleteItem('${operation.id}')">Eliminar</button></div>  
         </td>                
         </tr> 
         `
@@ -213,6 +217,18 @@ const saveNewOperation = () => {
     }
 }
 
+
+const saveEditOperation = (operationId) => {
+    return {
+		id:operationId,
+		descripcion: $("#description-edit-op").value,
+		categoria: $("#categories-option-operations-edit").value,
+		fecha: $("#dateEdit").value,
+		monto: $("#amountEdit").value,
+		tipo: $("#type").value
+    }
+}
+
 const showSectionEdit = (operationId) => {
     $("#balances-section").classList.add("hidden");
     $("#edit-operations-section").classList.remove("hidden");
@@ -222,6 +238,17 @@ const showSectionEdit = (operationId) => {
     $("#categories-option-operations-edit").value = operationSelected.categoria;
     $("#dateEdit").value = operationSelected.fecha;
     $("#amountEdit").value = operationSelected.monto;
+	$("#type").value = operationSelected.tipo;
+}
+
+const deleteItem =  (operationId) => {
+
+	let data = getData('operationsLS');
+	let newData =data.filter((item => item.id != operationId ));
+	
+	setData('operationsLS',newData);
+	window.location.reload();
+
 }
 // EVENTS
 
@@ -257,14 +284,17 @@ $("#btnEditOperation").addEventListener("click", (e) => {
     e.preventDefault()
     const operationId = $("#btnEditOperation").getAttribute("data-id")
     const currentData = getData("operationsLS").map(operations => {
-        if (operations.id === operationId) {
-            return saveNewOperation()
-        }
-        return operations
+        if (operations.id === operationId){
+			return saveEditOperation(operationId);
+        	}
+		return operations;
         })
-        setData("operationsLS",currentData)     
-        window.location.reload()        
-})   
+    
+	setData("operationsLS",currentData);
+    window.location.reload();
+})
+
+
 
 
 
@@ -280,6 +310,7 @@ $("#show-filters").addEventListener("click", () => {
     $("#container-filters").classList.remove('hidden');
     $("#hide-filters").classList.remove('hidden')
 })
+
 
 //filtro POR TIPO Y CATEGORIA
 const filterOperations = () => {
@@ -385,10 +416,18 @@ const initializeApp = () => {
     setData('categoriesLS', categories);
     categoriesList(categories);
     renderNewOperations(operations);
-    renderBalance(operations); 
-  
+    renderBalance(operations);
 
-    $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`
+	if(getData('operationsLS').length > 0){
+		hiddenElement(["#no-results"]);
+	}else{
+		hiddenElement(["#table"]);
+	}
+	
+	/*
+	por que cargar el item aca y no en la lista original
+   $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`
+   */
 
     $("#add-btn-category").addEventListener("click", (e) => {
         e.preventDefault()
