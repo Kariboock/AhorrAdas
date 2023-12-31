@@ -216,47 +216,55 @@ const saveNewOperation = () => {
 const showSectionEdit = (operationId) => {
     $("#balances-section").classList.add("hidden");
     $("#edit-operations-section").classList.remove("hidden");
-    console.log("operationid----->",operationId);
-    
-     const operationSelected = getData ("operationsLS").find(operations => operations.id === operationId);
-     console.log("operationSelected-----",operationSelected);
-     $("#description-edit-op").value = operationSelected.descripcion;
-     $("#categories-option-operations-edit").value = operationSelected.categoria;
-     $("#dateEdit").value = operationSelected.fecha;
-     $("#amountEdit").value = operationSelected.monto;
+    $("#btnEditOperation").setAttribute("data-id",operationId)
+    const operationSelected = getData ("operationsLS").find(operations => operations.id === operationId);
+    $("#description-edit-op").value = operationSelected.descripcion;
+    $("#categories-option-operations-edit").value = operationSelected.categoria;
+    $("#dateEdit").value = operationSelected.fecha;
+    $("#amountEdit").value = operationSelected.monto;
 }
-
-
 // EVENTS
 
-setData("operationsLS", operations);
+    
+setData("operationsLS",operations);
+    
 
-$("#addNewOperation").addEventListener("click", () => {
-    e.preventDefault()
-    hiddenElement(["#new-operations-section", "#no-results"])
-    $("#balances-section").classList.remove("hidden")
-    $("#table").classList.remove("hidden")
-    const currentData = getData("operationsLS")
-    currentData.push(saveNewOperation())
-    setData("operationsLS", currentData)
-    renderNewOperations()    
-    renderBalance()
-    window.location.reload() 
-   
-})
-
-$("#cancelNewOperation").addEventListener("click", () => {
+$("#cancelNewOperation").addEventListener("click", (e) => {
     $("#new-operations-section").classList.add("hidden")
     $("#balances-section").classList.remove("hidden")
     renderBalance()
-})
+}) 
 
-$("#canceleditOperation").addEventListener("click", () => {
+$("#canceleditOperation").addEventListener("click", (e) => {
     $("#edit-operations-section").classList.add("hidden")
     $("#balances-section").classList.remove("hidden")
     renderBalance()
 })
 
+
+$("#addNewOperation").addEventListener("click", (e) => {
+    hiddenElement(["#new-operations-section", "#no-results"])
+    $("#balances-section").classList.remove("hidden")  
+    $("#table").classList.remove("hidden")
+    e.preventDefault()     
+    const currentData = getData("operationsLS")
+    currentData.push(saveNewOperation())
+    setData("operationsLS",currentData)     
+    window.location.reload()
+})     
+
+$("#btnEditOperation").addEventListener("click", (e) => {
+    e.preventDefault()
+    const operationId = $("#btnEditOperation").getAttribute("data-id")
+    const currentData = getData("operationsLS").map(operations => {
+        if (operations.id === operationId) {
+            return saveNewOperation()
+        }
+        return operations
+        })
+        setData("operationsLS",currentData)     
+        window.location.reload()        
+})   
 
 
 
@@ -373,10 +381,13 @@ const renderBalance = () => {
 
 //INICIALIZE FUNCTION
 const initializeApp = () => {
+    
     setData('categoriesLS', categories);
     categoriesList(categories);
     renderNewOperations(operations);
-    renderBalance(operations)
+    renderBalance(operations); 
+  
+
     $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`
 
     $("#add-btn-category").addEventListener("click", (e) => {
@@ -396,20 +407,8 @@ const initializeApp = () => {
         categoriesList(categories)
         confirmEditCategory()
     })
-    
-    setData("operationsLS",operations);
-    renderNewOperations(operations);
 
-    $("#addNewOperation").addEventListener("click", (e) => {
-        hiddenElement(["#new-operations-section", "#no-results"])
-        $("#balances-section").classList.remove("hidden")  
-        $("#table").classList.remove("hidden")
-        e.preventDefault()     
-        const currentData = getData("operationsLS")
-        currentData.push(saveNewOperation())
-        setData("operationsLS",currentData)      
-        window.location.reload()
-    })     
+
 }
 window.addEventListener("load", initializeApp())
 
