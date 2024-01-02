@@ -85,13 +85,13 @@ const categories = getData("categoriesLS") || categoriesListDefault
 
 
 
-
-
 const categoriesList = (categories) => {
-    //if (Array.isArray(categories) && categories !== undefined && categories !== null) {
-    //cleanContainer("#categories-list", "#categories-option-filters", "#categories-option-operations")
-    for (const category of categories) {
-        $("#categories-list").innerHTML += `
+    if (Array.isArray(categories) && categories !== undefined && categories !== null) {
+        $("#categories-list").innerHTML = "";
+        $("#categories-option-filters").innerHTML = "";
+        $("#categories-option-operations").innerHTML = "";
+        for (const category of categories) {
+            $("#categories-list").innerHTML += `
             <div class="flex justify-between">
                 <li class="m-2 p-0.5 bg-emerald-100  inset-y-0 left-0" value="${category.categoryName}">${category.categoryName}</li>
                 <div class="flex inset-y-0 right-0">
@@ -100,13 +100,14 @@ const categoriesList = (categories) => {
                 </div>
             </div>
             `
-        $("#categories-option-filters").innerHTML += `
+            $("#categories-option-filters").innerHTML += `
             <option value="${category.categoryName}">${category.categoryName}</option>`
-        $("#categories-option-operations").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
+            $("#categories-option-operations").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
+        }
     }
-    // }
 }
-//setData("categoriesLS", categories);
+setData("categoriesLS", categories);
+categoriesList(categories)
 
 //delete category
 const deleteCategory = (categoryId) => {
@@ -118,6 +119,7 @@ const deleteCategory = (categoryId) => {
             deleteCategory(categoryId)
             setData('categoriesLS', filteredCategories);
             getData(categories)
+            console.log(categories)
             categoriesList(categories)
             window.location.reload(["#categories-list", "#categories-option-filters", "#categories-option-operations"])
         }
@@ -144,6 +146,8 @@ const confirmEditCategory = () => {
         }
         return category;
     });
+    setData("categoriesLS", updatedCategories);
+    categoriesList(updatedCategories);
 }
 
 //add category 
@@ -152,16 +156,21 @@ const saveNewCategory = () => {
         categoryName: $("#input-add-category").value,
         id: randomId(),
     }
+
 }
-setData('categoriesLS', saveNewCategory())
 
 const saveNewEditedCategory = () => {
-    return {
-        categoryName: $("#input-edit-category").value,
-        id: randomId(),
-    }
+    const idOfCategory = $("#edit-btn-category").getAttribute("category-selected-id");
+    const updatedCategories = getData("categoriesLS").map(category => {
+        if(category.id === idOfCategory) {
+            category.categoryName = $("#input-edit-category").value;
+        }
+        return category;
+    })
+    setData("categoriesLS", updatedCategories);
+    window.location.reload(["#categories-list", "#categories-option-filters", "#cateogries-option-operations"])
 }
-setData('categoriesLS', saveNewEditedCategory())
+
 
 $("#boton-cancelar-editar-categoria").onclick = () => {
     hiddenElement(["#category-edit-section", "#new-operations-section", "#reports-section", "#balances-section"]);
@@ -169,20 +178,15 @@ $("#boton-cancelar-editar-categoria").onclick = () => {
 }
 
 $("#add-btn-category").addEventListener("click", () => {
-    const updatedCategories = getData('categoriesLS')
-    updatedCategories.push(saveNewCategory())
+    const updatedCategories = getData('categoriesLS');
+    const newCategory = saveNewCategory();
+    updatedCategories.push(newCategory);
     setData('categoriesLS', updatedCategories)
-    getData(categories)
-    categoriesList(categories)
+    categoriesList(updatedCategories)
 })
 
 $("#edit-btn-category").addEventListener("click", () => {
-    const updatedEditedCategories = getData('categoriesLS')
-    updatedEditedCategories.push(saveNewEditedCategory())
-    setData('categoriesLS', updatedEditedCategories)
-    getData(categories)
-    confirmEditCategory()
-    categoriesList(categories);
+    confirmEditCategory();
 })
 
 
@@ -304,10 +308,10 @@ const filterOperations = () => {
             filteredOperations.sort((a, b) => a.monto - b.monto);
             break
         case "a-to-z":
-            filteredOperations.sort((a, b) => a.descripcion - b.descripcion);
+            filteredOperations.sort((a, b) => a.descripcion.localeCompare(b.descripcion));
             break
         case "z-to-a":
-            filteredOperations.sort((b, a) => b.descripcion - a.descripcion);
+            filteredOperations.sort((a, b) => b.descripcion.localeCompare(a.descripcion));
             break
         default:
             filteredOperations.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
@@ -355,57 +359,52 @@ const renderBalance = () => {
 }
 
 //REPORTES
-const currentCategories = getData(categories)
-const currentOperations = getData("operationsLS")
+// const currentCategories = getData(categories)
+// const currentOperations = getData("operationsLS")
 
-const categoriesWhiteOperations = () => {
+// const categoriesWhiteOperations = () => {
 
-    const categoriesWhiteOp = currentCategories.map(category => {
-        const operationForCategory = currentOperations.filter(operation => operation.categoria === category);
-        //acumuladores
-        let spentAcc = 0;
-        let revenueAcc = 0;
+//     const categoriesWhiteOp = currentCategories.map(category => {
+//         const operationForCategory = currentOperations.filter(operation => operation.categoria === category);
+//         //acumuladores
+//         let spentAcc = 0;
+//         let revenueAcc = 0;
 
-        operationForCategory.forEach(operation => {
-            if (operation.tipo === "revenue") {
-                revenueAcc += parseInt(operation.monto);
-            }
-            if (operation.tipo === "spent") {
-                spentAcc += parseInt(operation.monto);
-            }
+//         operationForCategory.forEach(operation => {
+//             if (operation.tipo === "revenue") {
+//                 revenueAcc += parseInt(operation.monto);
+//             }
+//             if (operation.tipo === "spent") {
+//                 spentAcc += parseInt(operation.monto);
+//             }
 
-        });
+//         });
 
-        return {
-            name: category,
-            revenue: revenueAcc,
-            spent: spentAcc,
-            balance: revenueAcc - spentAcc,
-        };
-    });
-    return categoriesWhiteOp;
-}
-
-
-// const order = [...categoriesWhiteOperations()];
-// const summary = (categoriesWhiteOp) => {
-//     order.sort((a, b) => b[categoriesWhiteOp] - a[element]);
-//     return order[0];
+//         return {
+//             name: category,
+//             revenue: revenueAcc,
+//             spent: spentAcc,
+//             balance: revenueAcc - spentAcc,
+//         };
+//     });
+//     return categoriesWhiteOp;
 // }
 
-const summaryReports = (operationsLS) => {
-    if (operationsLS.length > 1) {
-        $("#no-reports-container").classList.add("hidden");
-        $("#summary-container").classList.remove("hidden");
 
-        $("#highest-earning-category-name").innerHTML = `${summary("revenue").name.categoryName}`;
-        $("#highest-earning-category-amount").innerHTML = ` +$${summary("revenue").revenue}`;
-        $("#highest-spending-category-name").innerHTML = `${summary("spent").name.categoryName}`;
-        $("#highest-spending-category-amount").innerHTML = `-$${summary("spent").spent}`;
-        $("#highest-balance-category-name").innerHTML = `${summary("balance").name.categoryName}`;
-        $("#highest-balance-category-amount").innerHTML = `$${summary("balance").balance}`;
-    }
-}
+// // const order = [...categoriesWhiteOperations()];
+// // const summary = (categoriesWhiteOp) => {
+// //     order.sort((a, b) => b[categoriesWhiteOp] - a[element]);
+// //     return order[0];
+// // }
+
+// const summaryReports = (operations) => {
+//         $("#highest-earning-category-name").innerHTML = `${summary("revenue").name.categoryName}`;
+//         $("#highest-earning-category-amount").innerHTML = ` +$${summary("revenue").revenue}`;
+//         $("#highest-spending-category-name").innerHTML = `${summary("spent").name.categoryName}`;
+//         $("#highest-spending-category-amount").innerHTML = `-$${summary("spent").spent}`;
+//         $("#highest-balance-category-name").innerHTML = `${summary("balance").name.categoryName}`;
+//         $("#highest-balance-category-amount").innerHTML = `$${summary("balance").balance}`;
+// }
 
 
 // console.log(summary("revenue"));
@@ -413,7 +412,7 @@ const summaryReports = (operationsLS) => {
 //INICIALIZE FUNCTION
 const initializeApp = () => {
     setData('categoriesLS', categories);
-    setData('operationsLS', operations);
+    getData('operationsLS', operations);
     categoriesList(categories);
     renderNewOperations(operations);
     renderBalance();
