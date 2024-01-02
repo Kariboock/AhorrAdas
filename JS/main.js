@@ -16,6 +16,7 @@ const hiddenElement = (selectors) => {
 
 const cleanContainer = (selector) => $(selector).innerHTML = ""
 
+
 /* Nav events */
 $("#balance-btn-nav").addEventListener('click', () => {
     $("#balances-section").classList.remove('hidden');
@@ -48,13 +49,13 @@ $("#btn-options-nav").addEventListener("click", () => {
 
 $("#btn-cruz-options").addEventListener("click", () => {
     $("#btn-cruz-options").classList.add("hidden")
-    $("#navbar-btn").classList.add("hidden")
     $("#btn-options-nav").classList.remove('hidden')
+    $("#navbar-btn").classList.add("hidden")
     $("#navbar-btn").classList.remove("fixed", "top-19", "right-0", "mt-8", "shadow-md", "shadow-gray-300", "rounded-md")
 })
 
 
-/* CATEGORIAS */
+/* CATEGORIES */
 const categoriesListDefault = [
     {
         categoryName: 'Comidas',
@@ -80,10 +81,6 @@ const categoriesListDefault = [
         categoryName: 'Trabajo',
         id: randomId(),
     },
-	{
-        categoryName: 'Todas',
-        id: randomId(),
-    }
 ];
 
 const categories = getData("categoriesLS") || categoriesListDefault
@@ -115,25 +112,18 @@ const categoriesList = (categories) => {
 }
 
 
-
-//delete category
 const deleteCategory = (categoryId) => {
     for (let i = 0; i < $$('.delete-categories').length; i++) {
         $$('.delete-categories')[i].onclick = () => {
-            const croppedId = $$('.delete-categories')[i].id.slice(20)
-            numberId = Number(croppedId)
-            const filteredCategories = categories.filter(category => category.id != categoryId)
+            const croppedId = $$('.delete-categories')[i].id.slice(20);
+            numberId = Number(croppedId);
+            const filteredCategories = categories.filter(category => category.id != categoryId);
             setData('categoriesLS', filteredCategories);
-            categoriesList(categories)
-            deleteCategory(categoryId)
-            window.location.reload(["#categories-list", "#categories-option-filters", "#categories-option-operations"])
+            window.location.reload();
         }
     }
 }
-//deleteCategory(category)
 
-
-// //edit category
 const viewEditCategory = (idOfCategory) => {
     hiddenElement(["#new-operations-section", "#reports-section", "#category-section", "#balances-section"])
     $("#category-edit-section").classList.remove('hidden')
@@ -156,14 +146,12 @@ const confirmEditCategory = () => {
     categoriesList(updatedCategories);
 }
 
-//add category 
 const saveNewCategory = () => {
     return {
         categoryName: $("#input-add-category").value,
         id: randomId(),
     }
 }
-
 
 const saveNewEditedCategory = () => {
     return {
@@ -172,31 +160,26 @@ const saveNewEditedCategory = () => {
     }
 }
 
-
 $("#boton-cancelar-editar-categoria").onclick = () => {
     hiddenElement(["#category-edit-section", "#new-operations-section", "#reports-section", "#balances-section"]);
     $("#category-section").classList.remove('hidden')
 }
 
 
-
-// Funciones Kari
-// OPERATIONS
+// OPERATIONS 
 const operations = getData("operationsLS") || []
 
-// RENDERS
 const renderNewOperations = (operations) => {
     if (Array.isArray(operations) && operations !== undefined && operations !== null) {
         for (const operation of operations) {
-            //cleanContainer("#body-table")
             $("#body-table").innerHTML += `
         <div class="w-full flex justify-items-center p-3">
         <tr>
-        <td class="font-bold pl-9">${operation.descripcion}</td>
-        <td class="border-none border-2 rounded border-slate-500 bg-emerald-100 pl-8">${operation.categoria}</td>
-        <td class="pl-8">${operation.fecha}</td>
-        <td class="pl-7">$${operation.monto}</td> 
-        <td class="pl-7">            
+        <td class="font-bold pl-4">${operation.descripcion}</td>
+        <td class="border-none border-2 rounded border-slate-500 bg-emerald-100 pl-4">${operation.categoria}</td>
+        <td class="pl-4">${operation.fecha}</td>
+        <td class="pl-4">${ItemRenderAmount(operation.tipo, operation.monto)}</td> 
+        <td class="pl-4">            
         <div"><button class="text-blue-400" onclick="showSectionEdit('${operation.id}')">Editar</button></div>
         <div><button class="text-blue-400" onclick="deleteItem('${operation.id}')">Eliminar</button></div>  
         </td>                
@@ -204,6 +187,17 @@ const renderNewOperations = (operations) => {
         `
         }
     }
+}
+
+const ItemRenderAmount = (tipo, amount) => {
+    let itemRenderer = amount;
+    if (tipo === 'spent') {
+        itemRenderer = `<span class='text-red-500'>$${amount}</span>`;
+    } else {
+        itemRenderer = `<span class='text-green-500'>$${amount}</span>`;
+    }
+
+    return itemRenderer;
 }
 
 const saveNewOperation = () => {
@@ -217,50 +211,45 @@ const saveNewOperation = () => {
     }
 }
 
-
 const saveEditOperation = (operationId) => {
     return {
-		id:operationId,
-		descripcion: $("#description-edit-op").value,
-		categoria: $("#categories-option-operations-edit").value,
-		fecha: $("#dateEdit").value,
-		monto: $("#amountEdit").value,
-		tipo: $("#type").value
+        id: operationId,
+        descripcion: $("#description-edit-op").value,
+        categoria: $("#categories-option-operations-edit").value,
+        fecha: $("#dateEdit").value,
+        monto: $("#amountEdit").value,
+        tipo: $("#type").value
     }
 }
 
 const showSectionEdit = (operationId) => {
     $("#balances-section").classList.add("hidden");
     $("#edit-operations-section").classList.remove("hidden");
-    $("#btnEditOperation").setAttribute("data-id",operationId)
-    const operationSelected = getData ("operationsLS").find(operations => operations.id === operationId);
+    $("#btnEditOperation").setAttribute("data-id", operationId)
+    const operationSelected = getData("operationsLS").find(operations => operations.id === operationId);
     $("#description-edit-op").value = operationSelected.descripcion;
     $("#categories-option-operations-edit").value = operationSelected.categoria;
     $("#dateEdit").value = operationSelected.fecha;
     $("#amountEdit").value = operationSelected.monto;
-	$("#type").value = operationSelected.tipo;
+    $("#type").value = operationSelected.tipo;
 }
 
-const deleteItem =  (operationId) => {
+const deleteItem = (operationId) => {
+    let data = getData('operationsLS');
+    let itemSelected = data.filter(item => item.id === operationId);
+    if (confirm(`¿Seguro desea eliminar esta operación?`)) {
+        let newData = data.filter((item => item.id != operationId));
 
-	let data = getData('operationsLS');
-	let newData =data.filter((item => item.id != operationId ));
-	
-	setData('operationsLS',newData);
-	window.location.reload();
-
+        setData('operationsLS', newData);
+        window.location.reload();
+    }
 }
-// EVENTS
-
-    
-setData("operationsLS",operations);
-    
 
 $("#cancelNewOperation").addEventListener("click", (e) => {
     $("#new-operations-section").classList.add("hidden")
     $("#balances-section").classList.remove("hidden")
     renderBalance()
-}) 
+})
 
 $("#canceleditOperation").addEventListener("click", (e) => {
     $("#edit-operations-section").classList.add("hidden")
@@ -271,31 +260,27 @@ $("#canceleditOperation").addEventListener("click", (e) => {
 
 $("#addNewOperation").addEventListener("click", (e) => {
     hiddenElement(["#new-operations-section", "#no-results"])
-    $("#balances-section").classList.remove("hidden")  
+    $("#balances-section").classList.remove("hidden")
     $("#table").classList.remove("hidden")
-    e.preventDefault()     
+    e.preventDefault()
     const currentData = getData("operationsLS")
     currentData.push(saveNewOperation())
-    setData("operationsLS",currentData)     
+    setData("operationsLS", currentData)
     window.location.reload()
-})     
+})
 
 $("#btnEditOperation").addEventListener("click", (e) => {
     e.preventDefault()
     const operationId = $("#btnEditOperation").getAttribute("data-id")
     const currentData = getData("operationsLS").map(operations => {
-        if (operations.id === operationId){
-			return saveEditOperation(operationId);
-        	}
-		return operations;
-        })
-    
-	setData("operationsLS",currentData);
+        if (operations.id === operationId) {
+            return saveEditOperation(operationId);
+        }
+        return operations;
+    })
+    setData("operationsLS", currentData);
     window.location.reload();
 })
-
-
-
 
 
 /* FILTROS */
@@ -315,7 +300,6 @@ $("#show-filters").addEventListener("click", () => {
 //filtro POR TIPO Y CATEGORIA
 const filterOperations = () => {
     let filteredOperations = operations;
-
 
     // Aplicar filtros según el tipo
     switch ($("#type-operation-balances-section").value) {
@@ -369,14 +353,12 @@ const filterOperations = () => {
     }
 
     renderNewOperations(filteredOperations);
-    renderBalance(filteredOperations)
-};
-
+    renderBalance(filteredOperations);
+}
 
 
 //BALANCES
 const balanceCostProfit = (array, tipo) => {
-
     const filterOperation = array.filter((arr) => {
         return arr.tipo === tipo && arr
     })
@@ -395,67 +377,26 @@ const updatedBalance = () => {
 }
 
 const resetBalance = () => {
-    $("#total-profit").innerHTML = `+$0`
-    $("#total-cost").innerHTML = `+$0`
-    $("#total").innerHTML = `$0`
+    $("#total-profit").innerHTML = +$0
+    $("#total-cost").innerHTML = +$0
+    $("#total").innerHTML = $0
 }
 
 const renderBalance = () => {
-    if(getData("operationsLS") === "[]"){
+    if (getData("operationsLS") === "[]") {
         resetBalance()
     }
     else {
         updatedBalance()
     }
 }
-//renderBalance()
-
-//INICIALIZE FUNCTION
-const initializeApp = () => {
-    
-    setData('categoriesLS', categories);
-    categoriesList(categories);
-    renderNewOperations(operations);
-    renderBalance(operations);
-
-	if(getData('operationsLS').length > 0){
-		hiddenElement(["#no-results"]);
-	}else{
-		hiddenElement(["#table"]);
-	}
-	
-	/*
-	por que cargar el item aca y no en la lista original
-   $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`
-   */
-
-    $("#add-btn-category").addEventListener("click", (e) => {
-        e.preventDefault()
-        const updateCategories = getData('categoriesLS')
-        updateCategories.push(saveNewCategory())
-        setData('categoriesLS', updateCategories)
-        categoriesList(categories)
-        window.location.reload()
-    })
-
-    $("#edit-btn-category").addEventListener("click", (e) => {
-        e.preventDefault()
-        const updateEditedCategories = getData('categoriesLS')
-        updateEditedCategories.push(saveNewEditedCategory())
-        setData('categoriesLS', updateEditedCategories)
-        categoriesList(categories)
-        confirmEditCategory()
-    })
-
-
-}
-window.addEventListener("load", initializeApp())
 
 $("#type-operation-balances-section").addEventListener("change", () => {
     cleanContainer("#body-table");
     filterOperations()
     renderBalance()
 })
+
 $("#categories-option-filters").addEventListener("change", () => {
     cleanContainer("#body-table");
     filterOperations()
@@ -467,8 +408,48 @@ $("#from-input").addEventListener("change", () => {
     filterOperations()
     renderBalance()
 });
+
 $("#sort-by-select").addEventListener("change", () => {
     cleanContainer("#body-table");
     filterOperations()
     renderBalance()
 });
+
+
+//INICIALIZE FUNCTION
+const initializeApp = () => {
+    setData("operationsLS", operations);
+    setData('categoriesLS', categories);
+    categoriesList(categories);
+    renderNewOperations(operations);
+    renderBalance(operations);
+
+    if (getData('operationsLS').length > 0) {
+        hiddenElement(["#no-results"]);
+    } else {
+        hiddenElement(["#table"]);
+    }
+
+
+    $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`;
+
+    $("#add-btn-category").addEventListener("click", (e) => {
+        e.preventDefault();
+        const updateCategories = getData('categoriesLS');
+        updateCategories.push(saveNewCategory());
+        setData('categoriesLS', updateCategories);
+        categoriesList(categories);
+        window.location.reload()
+    })
+
+    $("#edit-btn-category").addEventListener("click", (e) => {
+        e.preventDefault();
+        const updateEditedCategories = getData('categoriesLS');
+        updateEditedCategories.push(saveNewEditedCategory());
+        setData('categoriesLS', updateEditedCategories);
+        categoriesList(categories);
+        confirmEditCategory();
+    })
+}
+window.addEventListener("load", initializeApp())
+
