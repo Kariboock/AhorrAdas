@@ -14,6 +14,7 @@ const hiddenElement = (selectors) => {
     }
 }
 
+const cleanContainer = (selector) => $(selector).innerHTML = ""
 
 /* Nav events */
 $("#balance-btn-nav").addEventListener('click', () => {
@@ -85,11 +86,12 @@ const categories = getData("categoriesLS") || categoriesListDefault
 
 
 
+
 const categoriesList = (categories) => {
+    cleanContainer("#categories-list")
+    cleanContainer("#categories-option-filters")
+    cleanContainer("#categories-option-operations")
     if (Array.isArray(categories) && categories !== undefined && categories !== null) {
-        $("#categories-list").innerHTML = "";
-        $("#categories-option-filters").innerHTML = "";
-        $("#categories-option-operations").innerHTML = "";
         for (const category of categories) {
             $("#categories-list").innerHTML += `
             <div class="flex justify-between">
@@ -103,11 +105,12 @@ const categoriesList = (categories) => {
             $("#categories-option-filters").innerHTML += `
             <option value="${category.categoryName}">${category.categoryName}</option>`
             $("#categories-option-operations").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
+           // $("#categories-option-operations-edit").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
         }
     }
 }
-setData("categoriesLS", categories);
-categoriesList(categories)
+
+
 
 //delete category
 const deleteCategory = (categoryId) => {
@@ -116,11 +119,9 @@ const deleteCategory = (categoryId) => {
             const croppedId = $$('.delete-categories')[i].id.slice(20)
             numberId = Number(croppedId)
             const filteredCategories = categories.filter(category => category.id != categoryId)
-            deleteCategory(categoryId)
             setData('categoriesLS', filteredCategories);
-            getData(categories)
-            console.log(categories)
             categoriesList(categories)
+            deleteCategory(categoryId)
             window.location.reload(["#categories-list", "#categories-option-filters", "#categories-option-operations"])
         }
     }
@@ -146,7 +147,8 @@ const confirmEditCategory = () => {
         }
         return category;
     });
-    setData("categoriesLS", updatedCategories);
+
+    setData('categoriesLS', updatedCategories);
     categoriesList(updatedCategories);
 }
 
@@ -156,19 +158,14 @@ const saveNewCategory = () => {
         categoryName: $("#input-add-category").value,
         id: randomId(),
     }
-
 }
 
+
 const saveNewEditedCategory = () => {
-    const idOfCategory = $("#edit-btn-category").getAttribute("category-selected-id");
-    const updatedCategories = getData("categoriesLS").map(category => {
-        if(category.id === idOfCategory) {
-            category.categoryName = $("#input-edit-category").value;
-        }
-        return category;
-    })
-    setData("categoriesLS", updatedCategories);
-    window.location.reload(["#categories-list", "#categories-option-filters", "#cateogries-option-operations"])
+    return {
+        categoryName: $("#input-edit-category").value,
+        id: randomId(),
+    }
 }
 
 
@@ -177,38 +174,30 @@ $("#boton-cancelar-editar-categoria").onclick = () => {
     $("#category-section").classList.remove('hidden')
 }
 
-$("#add-btn-category").addEventListener("click", () => {
-    const updatedCategories = getData('categoriesLS');
-    const newCategory = saveNewCategory();
-    updatedCategories.push(newCategory);
-    setData('categoriesLS', updatedCategories)
-    categoriesList(updatedCategories)
-})
-
-$("#edit-btn-category").addEventListener("click", () => {
-    confirmEditCategory();
-})
 
 
 // Funciones Kari
-
+// OPERATIONS
 const operations = getData("operationsLS") || []
 
 // RENDERS
 const renderNewOperations = (operations) => {
     if (Array.isArray(operations) && operations !== undefined && operations !== null) {
         for (const operation of operations) {
-            $("#body-table").innerHTML +=
-                `<tr>
-                <td>${operation.descripcion}</td>
-                <td>${operation.categoria}</td>
-                <td>${operation.fecha}</td>
-                <td>${operation.monto}</td>
-                <td>
-                <button class="text-blue-300" id="editBtnTable">Editar</button>
-                <button class="text-blue-300" id="deleteBtnTable">Eliminar</button>        
-                </td>          
-                </tr>`
+            //cleanContainer("#body-table")
+            $("#body-table").innerHTML += `
+        <div class="w-full flex justify-items-center p-3">
+        <tr>
+        <td class="font-bold pl-9">${operation.descripcion}</td>
+        <td class="border-none border-2 rounded border-slate-500 bg-emerald-100 pl-8">${operation.categoria}</td>
+        <td class="pl-8">${operation.fecha}</td>
+        <td class="pl-7">$${operation.monto}</td> 
+        <td class="pl-7">            
+        <div"><button class="text-blue-400" onclick="showSectionEdit('${operation.id}')">Editar</button></div>
+        <div><button class="text-blue-400" onclick="deleteItem('${operation.id}')">Eliminar</button></div>  
+        </td>                
+        </tr> 
+        `
         }
     }
 }
@@ -224,29 +213,85 @@ const saveNewOperation = () => {
     }
 }
 
+
+const saveEditOperation = (operationId) => {
+    return {
+		id:operationId,
+		descripcion: $("#description-edit-op").value,
+		categoria: $("#categories-option-operations-edit").value,
+		fecha: $("#dateEdit").value,
+		monto: $("#amountEdit").value,
+		tipo: $("#type").value
+    }
+}
+
+const showSectionEdit = (operationId) => {
+    $("#balances-section").classList.add("hidden");
+    $("#edit-operations-section").classList.remove("hidden");
+    $("#btnEditOperation").setAttribute("data-id",operationId)
+    const operationSelected = getData ("operationsLS").find(operations => operations.id === operationId);
+    $("#description-edit-op").value = operationSelected.descripcion;
+    $("#categories-option-operations-edit").value = operationSelected.categoria;
+    $("#dateEdit").value = operationSelected.fecha;
+    $("#amountEdit").value = operationSelected.monto;
+	$("#type").value = operationSelected.tipo;
+}
+
+const deleteItem =  (operationId) => {
+
+	let data = getData('operationsLS');
+	let newData =data.filter((item => item.id != operationId ));
+	
+	setData('operationsLS',newData);
+	window.location.reload();
+
+}
 // EVENTS
 
-setData("operationsLS", operations);
+    
+setData("operationsLS",operations);
+    
 
-$("#addNewOperation").addEventListener("click", () => {
-    //e.preventDefault()
-    hiddenElement(["#new-operations-section", "#no-results"])
+$("#cancelNewOperation").addEventListener("click", (e) => {
+    $("#new-operations-section").classList.add("hidden")
     $("#balances-section").classList.remove("hidden")
+    renderBalance()
+}) 
+
+$("#canceleditOperation").addEventListener("click", (e) => {
+    $("#edit-operations-section").classList.add("hidden")
+    $("#balances-section").classList.remove("hidden")
+    renderBalance()
+})
+
+
+$("#addNewOperation").addEventListener("click", (e) => {
+    hiddenElement(["#new-operations-section", "#no-results"])
+    $("#balances-section").classList.remove("hidden")  
     $("#table").classList.remove("hidden")
+    e.preventDefault()     
     const currentData = getData("operationsLS")
     currentData.push(saveNewOperation())
-    setData("operationsLS", currentData)
-    renderNewOperations()
-    renderBalance()
-    //summaryReports()
+    setData("operationsLS",currentData)     
     window.location.reload()
-})
+})     
 
-$("#cancelNewOperation").addEventListener("click", () => {
-    hiddenElement(["#new-operations-section"])
-    $("#balances-section").classList.remove("hidden")
-    renderBalance()
-})
+// $("#btnEditOperation").addEventListener("click", (e) => {
+//     e.preventDefault()
+//     const operationId = $("#btnEditOperation").getAttribute("data-id")
+//     const currentData = getData("operationsLS").map(operations => {
+//         if (operations.id === operationId){
+// 			return saveEditOperation(operationId);
+//         	}
+// 		return operations;
+//         })
+    
+// 	setData("operationsLS",currentData);
+//     window.location.reload();
+// })
+
+
+
 
 
 /* FILTROS */
@@ -262,9 +307,11 @@ $("#show-filters").addEventListener("click", () => {
     $("#hide-filters").classList.remove('hidden')
 })
 
+
 //filtro POR TIPO Y CATEGORIA
 const filterOperations = () => {
     let filteredOperations = operations;
+
 
     // Aplicar filtros según el tipo
     switch ($("#type-operation-balances-section").value) {
@@ -308,10 +355,10 @@ const filterOperations = () => {
             filteredOperations.sort((a, b) => a.monto - b.monto);
             break
         case "a-to-z":
-            filteredOperations.sort((a, b) => a.descripcion.localeCompare(b.descripcion));
+            filteredOperations.sort((a, b) => a.descripcion - b.descripcion);
             break
         case "z-to-a":
-            filteredOperations.sort((a, b) => b.descripcion.localeCompare(a.descripcion));
+            filteredOperations.sort((b, a) => b.descripcion - a.descripcion);
             break
         default:
             filteredOperations.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
@@ -339,7 +386,7 @@ const totalBalance = balanceCostProfit(operations, "revenue") - balanceCostProfi
 
 const updatedBalance = () => {
     $("#total-profit").innerHTML = `+$${balanceCostProfit(operations, "revenue")}`
-    $("#total-cost").innerHTML = `-$${balanceCostProfit(operations, "spent")}`
+    $("#total-cost").innerHTML = `+$${balanceCostProfit(operations, "spent")}`
     $("#total").innerHTML = `$${totalBalance}`
 }
 
@@ -350,105 +397,74 @@ const resetBalance = () => {
 }
 
 const renderBalance = () => {
-    if (getData("operationsLS") === "[]") {
+    if(getData("operationsLS") === "[]"){
         resetBalance()
     }
     else {
         updatedBalance()
     }
 }
-
-//REPORTES
-// const currentCategories = getData(categories)
-// const currentOperations = getData("operationsLS")
-
-// const categoriesWhiteOperations = () => {
-
-//     const categoriesWhiteOp = currentCategories.map(category => {
-//         const operationForCategory = currentOperations.filter(operation => operation.categoria === category);
-//         //acumuladores
-//         let spentAcc = 0;
-//         let revenueAcc = 0;
-
-//         operationForCategory.forEach(operation => {
-//             if (operation.tipo === "revenue") {
-//                 revenueAcc += parseInt(operation.monto);
-//             }
-//             if (operation.tipo === "spent") {
-//                 spentAcc += parseInt(operation.monto);
-//             }
-
-//         });
-
-//         return {
-//             name: category,
-//             revenue: revenueAcc,
-//             spent: spentAcc,
-//             balance: revenueAcc - spentAcc,
-//         };
-//     });
-//     return categoriesWhiteOp;
-// }
-
-
-// // const order = [...categoriesWhiteOperations()];
-// // const summary = (categoriesWhiteOp) => {
-// //     order.sort((a, b) => b[categoriesWhiteOp] - a[element]);
-// //     return order[0];
-// // }
-
-// const summaryReports = (operations) => {
-//         $("#highest-earning-category-name").innerHTML = `${summary("revenue").name.categoryName}`;
-//         $("#highest-earning-category-amount").innerHTML = ` +$${summary("revenue").revenue}`;
-//         $("#highest-spending-category-name").innerHTML = `${summary("spent").name.categoryName}`;
-//         $("#highest-spending-category-amount").innerHTML = `-$${summary("spent").spent}`;
-//         $("#highest-balance-category-name").innerHTML = `${summary("balance").name.categoryName}`;
-//         $("#highest-balance-category-amount").innerHTML = `$${summary("balance").balance}`;
-// }
-
-
-// console.log(summary("revenue"));
+//renderBalance()
 
 //INICIALIZE FUNCTION
 const initializeApp = () => {
+    
     setData('categoriesLS', categories);
-    getData('operationsLS', operations);
     categoriesList(categories);
     renderNewOperations(operations);
-    renderBalance();
-    //summaryReports(operations);
-    $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`
+    renderBalance(operations);
 
-    if (operations.length >= 1) {
-        $("#no-results").classList.add("hidden");
-        $("#table").classList.remove("hidden");
-    }
+	if(getData('operationsLS').length > 0){
+		hiddenElement(["#no-results"]);
+	}else{
+		hiddenElement(["#table"]);
+	}
+	
+	/*
+	por que cargar el item aca y no en la lista original*/
+   $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`
+   
 
-    if (operations.length > 1) {
-        $("#no-reports-container").classList.add("hidden");
-        $("#summary-container").classList.remove("hidden");
-    }
+    $("#add-btn-category").addEventListener("click", (e) => {
+        e.preventDefault()
+        const updateCategories = getData('categoriesLS')
+        updateCategories.push(saveNewCategory())
+        setData('categoriesLS', updateCategories)
+        categoriesList(categories)
+        window.location.reload()
+    })
+
+    $("#edit-btn-category").addEventListener("click", (e) => {
+        e.preventDefault()
+        const updateEditedCategories = getData('categoriesLS')
+        updateEditedCategories.push(saveNewEditedCategory())
+        setData('categoriesLS', updateEditedCategories)
+        categoriesList(categories)
+        confirmEditCategory()
+    })
+
+
 }
+window.addEventListener("load", initializeApp())
 
 $("#type-operation-balances-section").addEventListener("change", () => {
-    $("#body-table").innerHTML = "";
+    cleanContainer("#body-table");
     filterOperations()
     renderBalance()
 })
 $("#categories-option-filters").addEventListener("change", () => {
-    $("#body-table").innerHTML = "";
+    cleanContainer("#body-table");
     filterOperations()
     renderBalance()
 });
 
 $("#from-input").addEventListener("change", () => {
-    $("#body-table").innerHTML = "";
+    cleanContainer("#body-table");
     filterOperations()
     renderBalance()
 });
 $("#sort-by-select").addEventListener("change", () => {
-    $("#body-table").innerHTML = "";
+    cleanContainer("#body-table");
     filterOperations()
     renderBalance()
 });
-window.addEventListener("load", initializeApp())
