@@ -192,11 +192,11 @@ const renderNewOperations = (operations) => {
             $("#body-table").innerHTML += `
         <div class="w-full flex justify-items-center p-3">
         <tr>
-        <td class="font-bold pl-9">${operation.descripcion}</td>
-        <td class="border-none border-2 rounded border-slate-500 bg-emerald-100 pl-8">${operation.categoria}</td>
-        <td class="pl-8">${operation.fecha}</td>
-        <td class="pl-7">$${operation.monto}</td> 
-        <td class="pl-7">            
+        <td class="font-bold pl-4">${operation.descripcion}</td>
+        <td class="border-none border-2 rounded border-slate-500 bg-emerald-100 pl-4">${operation.categoria}</td>
+        <td class="pl-4">${operation.fecha}</td>
+        <td class="pl-4">${ItemRenderAmount(operation.tipo,operation.monto)}</td> 
+        <td class="pl-4">            
         <div"><button class="text-blue-400" onclick="showSectionEdit('${operation.id}')">Editar</button></div>
         <div><button class="text-blue-400" onclick="deleteItem('${operation.id}')">Eliminar</button></div>  
         </td>                
@@ -204,6 +204,17 @@ const renderNewOperations = (operations) => {
         `
         }
     }
+}
+
+const ItemRenderAmount = (tipo,amount)=>{
+	let itemRenderer = amount;
+	if(tipo === 'spent' ){
+		itemRenderer = `<span class = 'text-red-500'>$${amount}</span>`;
+	}else{
+		itemRenderer = `<span class = 'text-green-500'>$${amount}</span>`;
+	}
+
+	return itemRenderer;
 }
 
 const saveNewOperation = () => {
@@ -242,12 +253,16 @@ const showSectionEdit = (operationId) => {
 }
 
 const deleteItem =  (operationId) => {
-
 	let data = getData('operationsLS');
-	let newData =data.filter((item => item.id != operationId ));
+	let itemSelected = data.filter(item => item.id = operationId);
+
+	if(confirm('seguro desea eliminar '+ itemSelected.descripcion)){
+		let newData =data.filter((item => item.id != operationId ));
 	
-	setData('operationsLS',newData);
-	window.location.reload();
+		setData('operationsLS',newData);
+		window.location.reload();
+	}
+	
 
 }
 // EVENTS
@@ -471,5 +486,3 @@ $("#sort-by-select").addEventListener("change", () => {
     cleanContainer("#body-table");
     filterOperations()
     renderBalance()
-});
-
