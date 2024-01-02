@@ -107,9 +107,11 @@ const categoriesList = (categories) => {
             <option value="${category.categoryName}">${category.categoryName}</option>`
             $("#categories-option-operations").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
             $("#categories-option-operations-edit").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
+            $("#categories-option-operations-edit").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
         }
     }
 }
+
 
 
 const deleteCategory = (categoryId) => {
@@ -179,6 +181,17 @@ const renderNewOperations = (operations) => {
         <td class="border-none border-2 rounded border-slate-500 bg-emerald-100 pl-4">${operation.categoria}</td>
         <td class="pl-4">${operation.fecha}</td>
         <td class="pl-4">${ItemRenderAmount(operation.tipo, operation.monto)}</td> 
+        <td class="pl-4">            
+        <div"><button class="text-blue-400" onclick="showSectionEdit('${operation.id}')">Editar</button></div>
+        <div><button class="text-blue-400" onclick="deleteItem('${operation.id}')">Eliminar</button></div>  
+        </td>                
+        </tr> 
+        <div class="w-full flex justify-items-center p-3">
+        <tr>
+        <td class="font-bold pl-4">${operation.descripcion}</td>
+        <td class="border-none border-2 rounded border-slate-500 bg-emerald-100 pl-4">${operation.categoria}</td>
+        <td class="pl-4">${operation.fecha}</td>
+        <td class="pl-4">${ItemRenderAmount(operation.tipo,operation.monto)}</td> 
         <td class="pl-4">            
         <div"><button class="text-blue-400" onclick="showSectionEdit('${operation.id}')">Editar</button></div>
         <div><button class="text-blue-400" onclick="deleteItem('${operation.id}')">Eliminar</button></div>  
@@ -260,14 +273,14 @@ $("#canceleditOperation").addEventListener("click", (e) => {
 
 $("#addNewOperation").addEventListener("click", (e) => {
     hiddenElement(["#new-operations-section", "#no-results"])
-    $("#balances-section").classList.remove("hidden")
+    $("#balances-section").classList.remove("hidden")  
     $("#table").classList.remove("hidden")
     e.preventDefault()
     const currentData = getData("operationsLS")
     currentData.push(saveNewOperation())
     setData("operationsLS", currentData)
     window.location.reload()
-})
+})     
 
 $("#btnEditOperation").addEventListener("click", (e) => {
     e.preventDefault()
@@ -295,6 +308,7 @@ $("#show-filters").addEventListener("click", () => {
     $("#container-filters").classList.remove('hidden');
     $("#hide-filters").classList.remove('hidden')
 })
+
 
 
 //filtro POR TIPO Y CATEGORIA
