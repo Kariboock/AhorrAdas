@@ -79,6 +79,10 @@ const categoriesListDefault = [
     {
         categoryName: 'Trabajo',
         id: randomId(),
+    },
+	{
+        categoryName: 'Todas',
+        id: randomId(),
     }
 ];
 
@@ -105,7 +109,7 @@ const categoriesList = (categories) => {
             $("#categories-option-filters").innerHTML += `
             <option value="${category.categoryName}">${category.categoryName}</option>`
             $("#categories-option-operations").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
-           // $("#categories-option-operations-edit").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
+            $("#categories-option-operations-edit").innerHTML += `<option value="${category.categoryName}">${category.categoryName}</option>`
         }
     }
 }
@@ -276,19 +280,19 @@ $("#addNewOperation").addEventListener("click", (e) => {
     window.location.reload()
 })     
 
-// $("#btnEditOperation").addEventListener("click", (e) => {
-//     e.preventDefault()
-//     const operationId = $("#btnEditOperation").getAttribute("data-id")
-//     const currentData = getData("operationsLS").map(operations => {
-//         if (operations.id === operationId){
-// 			return saveEditOperation(operationId);
-//         	}
-// 		return operations;
-//         })
+$("#btnEditOperation").addEventListener("click", (e) => {
+    e.preventDefault()
+    const operationId = $("#btnEditOperation").getAttribute("data-id")
+    const currentData = getData("operationsLS").map(operations => {
+        if (operations.id === operationId){
+			return saveEditOperation(operationId);
+        	}
+		return operations;
+        })
     
-// 	setData("operationsLS",currentData);
-//     window.location.reload();
-// })
+	setData("operationsLS",currentData);
+    window.location.reload();
+})
 
 
 
@@ -421,9 +425,9 @@ const initializeApp = () => {
 	}
 	
 	/*
-	por que cargar el item aca y no en la lista original*/
+	por que cargar el item aca y no en la lista original
    $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`
-   
+   */
 
     $("#add-btn-category").addEventListener("click", (e) => {
         e.preventDefault()
