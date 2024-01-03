@@ -433,7 +433,7 @@ const updateReports = () =>{
        const highestSpendingMonth = getHighestSpentMonth();
    
    
-       $("#highest-earning-category-name").innerText = highestEarningCategory.categoryName;
+       $("#highest-earning-category-name").innerText = highestEarningCategory.name;
        $("#highest-earning-category-amount").innerText = `$${highestEarningCategory.amount}`;
    
        $("#highest-spending-category-name").innerText = highestSpendingCategory.name;
@@ -653,7 +653,7 @@ const initializeApp = () => {
         $("#summary-container").classList.remove("hidden");
     }
 
-    $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`;
+    $("#categories-option-filters").innerHTML += `<option value="todas" Selected>Todas</option>`;
 
     $("#add-btn-category").addEventListener("click", (e) => {
         e.preventDefault();
