@@ -130,6 +130,7 @@ const deleteCategory = (categoryId) => {
         }
     }
 }
+//deleteCategory(category)
 
 // //edit category
 const viewEditCategory = (idOfCategory) => {
@@ -154,6 +155,7 @@ const confirmEditCategory = () => {
     categoriesList(updatedCategories);
 }
 
+//add category 
 const saveNewCategory = () => {
     return {
         categoryName: $("#input-add-category").value,
@@ -173,6 +175,7 @@ const operations = getData("operationsLS") || []
 const renderNewOperations = (operations) => {
     if (Array.isArray(operations) && operations !== undefined && operations !== null) {
         for (const operation of operations) {
+            //cleanContainer("#body-table")
             $("#body-table").innerHTML += `
         <div class="w-full flex justify-items-center p-3">
         <tr>
@@ -248,6 +251,13 @@ const deleteItem =  (operationId) => {
 	}
 }
 
+
+// EVENTS
+
+    
+setData("operationsLS",operations);
+    
+
 $("#cancelNewOperation").addEventListener("click", (e) => {
     $("#new-operations-section").classList.add("hidden")
     $("#balances-section").classList.remove("hidden")
@@ -284,6 +294,9 @@ $("#btnEditOperation").addEventListener("click", (e) => {
 	setData("operationsLS",currentData);
     window.location.reload();
 })
+
+
+
 
 
 /* FILTROS */
@@ -356,6 +369,7 @@ const filterOperations = () => {
 
 //BALANCES
 const balanceCostProfit = (array, tipo) => {
+
     const filterOperation = array.filter((arr) => {
         return arr.tipo === tipo && arr
     })
@@ -387,7 +401,7 @@ const renderBalance = () => {
         updatedBalance()
     }
 }
-
+//renderBalance()
 
 $("#type-operation-balances-section").addEventListener("change", () => {
     cleanContainer("#body-table");
