@@ -203,7 +203,11 @@ const renderNewOperations = (operations) => {
         </tr> 
         `
         }
-    }
+    } if (getData('operationsLS').length > 0){
+		hiddenElement(["#no-results"]);
+	}else{
+		hiddenElement(["#table"]);
+	}
 }
 
 const ItemRenderAmount = (tipo,amount)=>{
@@ -308,7 +312,6 @@ $("#btnEditOperation").addEventListener("click", (e) => {
 	setData("operationsLS",currentData);
     window.location.reload();
 })
-
 
 
 
@@ -433,16 +436,10 @@ const initializeApp = () => {
     renderNewOperations(operations);
     renderBalance(operations);
 
-	if(getData('operationsLS').length > 0){
-		hiddenElement(["#no-results"]);
-	}else{
-		hiddenElement(["#table"]);
-	}
-	
-	/*
-	por que cargar el item aca y no en la lista original
-   $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`
-   */
+
+// 	por que cargar el item aca y no en la lista original
+//    $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`
+   
 
     $("#add-btn-category").addEventListener("click", (e) => {
         e.preventDefault()
