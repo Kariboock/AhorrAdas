@@ -80,10 +80,6 @@ const categoriesListDefault = [
         categoryName: 'Trabajo',
         id: randomId(),
     },
-	{
-        categoryName: 'Todas',
-        id: randomId(),
-    }
 ];
 
 const categories = getData("categoriesLS") || categoriesListDefault
@@ -132,7 +128,6 @@ const deleteCategory = (categoryId) => {
 }
 //deleteCategory(category)
 
-
 // //edit category
 const viewEditCategory = (idOfCategory) => {
     hiddenElement(["#new-operations-section", "#reports-section", "#category-section", "#balances-section"])
@@ -164,15 +159,6 @@ const saveNewCategory = () => {
     }
 }
 
-
-const saveNewEditedCategory = () => {
-    return {
-        categoryName: $("#input-edit-category").value,
-        id: randomId(),
-    }
-}
-
-
 $("#boton-cancelar-editar-categoria").onclick = () => {
     hiddenElement(["#category-edit-section", "#new-operations-section", "#reports-section", "#balances-section"]);
     $("#category-section").classList.remove('hidden')
@@ -180,11 +166,8 @@ $("#boton-cancelar-editar-categoria").onclick = () => {
 
 
 
-// Funciones Kari
 // OPERATIONS
 const operations = getData("operationsLS") || []
-
-// RENDERS
 const renderNewOperations = (operations) => {
     if (Array.isArray(operations) && operations !== undefined && operations !== null) {
         for (const operation of operations) {
@@ -287,9 +270,8 @@ $("#canceleditOperation").addEventListener("click", (e) => {
     renderBalance()
 })
 
-
 $("#addNewOperation").addEventListener("click", (e) => {
-    hiddenElement(["#new-operations-section", "#no-results"])
+    hiddenElement(["#new-operations-section"])
     $("#balances-section").classList.remove("hidden")  
     $("#table").classList.remove("hidden")
     e.preventDefault()     
@@ -317,7 +299,6 @@ $("#btnEditOperation").addEventListener("click", (e) => {
 
 
 /* FILTROS */
-//show/hide events
 $("#hide-filters").addEventListener("click", () => {
     hiddenElement(["#container-filters", "#hide-filters"]);
     $("#show-filters").classList.remove('hidden')
@@ -330,12 +311,9 @@ $("#show-filters").addEventListener("click", () => {
 })
 
 
-//filtro POR TIPO Y CATEGORIA
 const filterOperations = () => {
     let filteredOperations = operations;
 
-
-    // Aplicar filtros según el tipo
     switch ($("#type-operation-balances-section").value) {
         case "all":
             operations;
@@ -350,19 +328,17 @@ const filterOperations = () => {
             operations;
     }
 
-    // Aplicar filtros según la categoría
     if ($("#categories-option-filters").value === "todas") {
         filteredOperations;
     }
     else if ($("#categories-option-filters").value !== "") {
         filteredOperations = filteredOperations.filter(operation => operation.categoria === $("#categories-option-filters").value);
     }
-    // Aplicar filtros según la fecha
+
     if ($("#from-input").value !== "") {
         filteredOperations = filteredOperations.filter(operation => new Date(operation.fecha) >= new Date($("#from-input").value));
     }
 
-    // Ordenar según el criterio seleccionado
     switch ($("#sort-by-select").value) {
         case "recent":
             filteredOperations.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
@@ -377,19 +353,17 @@ const filterOperations = () => {
             filteredOperations.sort((a, b) => a.monto - b.monto);
             break
         case "a-to-z":
-            filteredOperations.sort((a, b) => a.descripcion - b.descripcion);
+            filteredOperations.sort((a, b) => a.descripcion.localeCompare(b.descripcion));
             break
         case "z-to-a":
-            filteredOperations.sort((b, a) => b.descripcion - a.descripcion);
+            filteredOperations.sort((b, a) => b.descripcion.localeCompare(a.descripcion));
             break
         default:
             filteredOperations.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
     }
-
     renderNewOperations(filteredOperations);
     renderBalance(filteredOperations)
 };
-
 
 
 //BALANCES
@@ -428,41 +402,6 @@ const renderBalance = () => {
 }
 //renderBalance()
 
-//INICIALIZE FUNCTION
-const initializeApp = () => {
-    
-    setData('categoriesLS', categories);
-    categoriesList(categories);
-    renderNewOperations(operations);
-    renderBalance(operations);
-
-
-// 	por que cargar el item aca y no en la lista original
-//    $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`
-   
-
-    $("#add-btn-category").addEventListener("click", (e) => {
-        e.preventDefault()
-        const updateCategories = getData('categoriesLS')
-        updateCategories.push(saveNewCategory())
-        setData('categoriesLS', updateCategories)
-        categoriesList(categories)
-        window.location.reload()
-    })
-
-    $("#edit-btn-category").addEventListener("click", (e) => {
-        e.preventDefault()
-        const updateEditedCategories = getData('categoriesLS')
-        updateEditedCategories.push(saveNewEditedCategory())
-        setData('categoriesLS', updateEditedCategories)
-        categoriesList(categories)
-        confirmEditCategory()
-    })
-
-
-}
-window.addEventListener("load", initializeApp())
-
 $("#type-operation-balances-section").addEventListener("change", () => {
     cleanContainer("#body-table");
     filterOperations()
@@ -484,3 +423,253 @@ $("#sort-by-select").addEventListener("change", () => {
     filterOperations()
     renderBalance()
 });
+
+//Reportes
+const updateReports = () =>{
+       const highestEarningCategory = getHighestEarningCategory();
+       const highestSpendingCategory = getHighestSpendingCategory();
+       const highestBalanceCategory = getHighestBalanceCategory(operations, categories);
+       const highestEarningMonth = getHighestRevenueMonth();
+       const highestSpendingMonth = getHighestSpentMonth();
+   
+   
+       $("#highest-earning-category-name").innerText = highestEarningCategory.categoryName;
+       $("#highest-earning-category-amount").innerText = `$${highestEarningCategory.amount}`;
+   
+       $("#highest-spending-category-name").innerText = highestSpendingCategory.name;
+       $("#highest-spending-category-amount").innerText = `$${highestSpendingCategory.amount}`;
+   
+       $("#highest-balance-category-name").innerText = highestBalanceCategory.name;
+       $("#highest-balance-category-amount").innerText = `$${highestBalanceCategory.amount}`;
+   
+       $("#highest-earning-month-name").innerText = highestEarningMonth.name;
+       $("#highest-earning-month-amount").innerText = `$${highestEarningMonth.amount}`;
+   
+       $("#highest-spending-month-name").innerText = highestSpendingMonth.name;
+       $("#highest-spending-month-amount").innerText = `$${highestSpendingMonth.amount}`;
+   };
+
+
+const getHighestEarningCategory = () => {
+    const getCategoryWithHighestEarning = (operations) => {
+        const revenueByCategory = {};
+        operations.forEach(operation => {
+            if(operation.tipo === "revenue") {
+                if(!revenueByCategory[operation.categoria]) {
+                    revenueByCategory[operation.categoria] = 0;
+                }
+                revenueByCategory[operation.categoria] += parseFloat(operation.monto);
+            }
+        });
+        let highestEarningCategory = null;
+        let highestEarningAmount = 0;
+
+
+        for(const category in revenueByCategory) {
+            if(revenueByCategory[category] > highestEarningAmount) {
+                highestEarningCategory = category;
+                highestEarningAmount = revenueByCategory[category];
+            }
+        }
+        return {
+            category: highestEarningCategory,
+            amount: highestEarningAmount.toFixed(2)
+        };
+        
+    };
+    const highestEarningCategory = getCategoryWithHighestEarning(operations);
+    $("#highest-earning-category-name").innerText = highestEarningCategory.category || "No hay registros de categorías con ganancias";
+    $("#highest-earning-category-amount").innerHTML = `$${highestEarningCategory.amount || "+$0.00"}`
+}
+
+//mayor gasto categoria
+const getHighestSpendingCategory = () => {
+    const spendingByCategory = {};
+    for(const operation of operations) {
+        if(operation.tipo === "spent") {
+            if(spendingByCategory[operation.categoria]) {
+                spendingByCategory[operation.categoria] += parseFloat(operation.monto);
+            } else {
+            spendingByCategory[operation.categoria] = parseFloat(operation.monto);
+            }
+        }
+    }
+    let highestSpendingCategory = null;
+    let highestSpendingAmount = 0;
+
+    for(const category in spendingByCategory){
+        if(spendingByCategory[category] > highestSpendingAmount) {
+            highestSpendingAmount = spendingByCategory[category];
+            highestSpendingCategory = category;
+        }
+    }
+
+    if(highestSpendingCategory) {
+        $("#highest-spending-category-name").innerText = highestSpendingCategory;
+        $("#highest-spending-category-amount").innerHTML = `-$${highestSpendingAmount.toFixed(2)}`;
+    } else {
+        $("#highest-spending-category-name").innerText = "No hay registros de categorías con gasto";
+        $("#highest-spending-category-amount").innerHTML = "-$0.00";
+    }
+};
+
+const getHighestBalanceCategory = (operations, categories) => {
+    let highestBalanceCategory = null;
+    let maxBalance = 0;
+
+    categories.forEach(category => {
+        const operationsForCategory = operations.filter(operation => operation.categoria === category.categoryName);
+        const balance = operationsForCategory.reduce((acc, operation) => {
+            if (operation.tipo === 'revenue') {
+                return acc + parseFloat(operation.monto);
+            } else {
+                return acc - parseFloat(operation.monto);
+            }
+        }, 0);
+
+        if (balance > maxBalance) {
+            maxBalance = balance;
+            highestBalanceCategory = category.categoryName;
+        }
+    });
+    if (highestBalanceCategory) {
+        $("#highest-balance-category-name").innerText = highestBalanceCategory || "No hay registros de categorías";
+        $("#highest-balance-category-amount").innerText = `$${maxBalance ||"$0.00"}`;
+    }
+}
+
+const getMonthWithHighestRevenue = () => {
+    const monthlyRevenue = {};
+
+    operations.forEach(operation => {
+        const operationDate = new Date(operation.fecha);
+        const monthYearKey = `${operationDate.getMonth()}-${operationDate.getFullYear()}`;
+
+        if (!monthlyRevenue[monthYearKey]) {
+            monthlyRevenue[monthYearKey] = 0;
+        }
+
+        if (operation.tipo === "revenue") {
+            monthlyRevenue[monthYearKey] += parseFloat(operation.monto);
+        }
+    });
+
+    let highestMonth = null;
+    let highestRevenue = 0;
+
+    for (const key in monthlyRevenue) {
+        if (monthlyRevenue[key] > highestRevenue) {
+            highestRevenue = monthlyRevenue[key];
+            highestMonth = key;
+        }
+    }
+
+    return {
+        month: highestMonth,
+        revenue: highestRevenue.toFixed(2),
+    };
+};
+
+const getHighestRevenueMonth = () => {
+    const highestRevenueMonth = getMonthWithHighestRevenue();
+    const [month, year] = highestRevenueMonth.month.split(' ');
+
+    const monthNames = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+
+    const monthName = monthNames[parseInt(month)];
+    $("#highest-earning-month-name").innerHTML = `${monthName} ${year}`;
+    $("#highest-earning-month-amount").innerHTML = `+$${highestRevenueMonth.revenue}`;
+}
+
+const getMonthWithHighesSpending = () => {
+    const monthlySpent = {};
+
+
+    operations.forEach(operation => {
+        const operationDate = new Date(operation.fecha);
+        const monthYearKey = `${operationDate.getMonth()}-${operationDate.getFullYear()}`;
+
+        if (!monthlySpent[monthYearKey]) {
+            monthlySpent[monthYearKey] = 0;
+        }
+
+        if (operation.tipo === "spent") {
+            monthlySpent[monthYearKey] += parseFloat(operation.monto);
+        }
+    });
+
+ 
+    let highestMonth = null;
+    let highestSpent = 0;
+
+    for (const key in monthlySpent) {
+        if (monthlySpent[key] > highestSpent) {
+            highestSpent = monthlySpent[key];
+            highestMonth = key;
+        }
+    }
+
+    return {
+        month: highestMonth,
+        spent: highestSpent.toFixed(2),
+    };
+};
+
+const getHighestSpentMonth = () => {
+    const highestSpentMonth = getMonthWithHighesSpending();
+    const [month, year] = highestSpentMonth.month.split(' ');
+
+    const monthNames = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+
+    const monthName = monthNames[parseInt(month)];
+    $("#highest-spending-month-name").innerHTML = `${monthName} ${year}`;
+    $("#highest-spending-month-amount").innerHTML = `+$${highestSpentMonth.spent}`;
+};
+
+
+
+//INICIALIZE FUNCTION
+const initializeApp = () => {
+    setData("operationsLS", operations);
+    setData('categoriesLS', categories);
+    categoriesList(categories);
+    renderNewOperations(operations);
+    renderBalance(operations);
+    updateReports(operations);
+
+    if (getData('operationsLS').length > 0) {
+        $("#no-results").classList.add("hidden");
+        $("#table").classList.remove("hidden");
+    }
+
+    if(getData('operationsLS').length > 1){
+        $("#no-reports-container").classList.add("hidden");
+        $("#summary-container").classList.remove("hidden");
+    }
+
+    $("#categories-option-filters").innerHTML += `<option value="todas" selected>Todas</option>`;
+
+    $("#add-btn-category").addEventListener("click", (e) => {
+        e.preventDefault();
+        const updateCategories = getData('categoriesLS');
+        updateCategories.push(saveNewCategory());
+        setData('categoriesLS', updateCategories);
+        categoriesList(categories);
+        window.location.reload()
+    })
+
+    $("#edit-btn-category").addEventListener("click", (e) => {
+        e.preventDefault();
+        const updateEditedCategories = getData('categoriesLS');
+        setData('categoriesLS', updateEditedCategories);
+        categoriesList(categories);
+        confirmEditCategory();
+    })
+}
+window.addEventListener("load", initializeApp())
