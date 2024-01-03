@@ -430,6 +430,10 @@ $("#sort-by-select").addEventListener("change", () => {
 });
 
 
+
+
+
+
 //INICIALIZE FUNCTION
 const initializeApp = () => {
     setData("operationsLS", operations);
