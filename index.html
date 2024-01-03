@@ -11,7 +11,6 @@
 </head>
 
 <body class="w-full flex-col bg-slate-100">
-
     <header class="w-full h-14">
         <nav class="w-full h-14 bg-teal-400 flex items-center p-1 justify-between" id="navbar">
             <div class="w-full flex justify-between pt-2">
@@ -42,11 +41,9 @@
             </div>
         </nav>
     </header>
-
     <main class="flex-col">
-
         <!--BALANCES SECTION-->
-        <section class="flex flex-col md:flex-row lg:mx-0 lg:my-10 rounded-md my-15" id="balances-section">
+        <section class="flex flex-col md:flex-row lg:my-10 lg:mx-200 rounded-md my-15" id="balances-section">
             <div class="flex-col lg:w-1/4 2xl:w-2/4 md:w-full mx-5">
                 <div class="bg-white border-solid rounded-md my-10 shadow-md shadow-gray-300">
                     <h2 class="text-3xl font-bold p-5">Balance</h2>
@@ -83,14 +80,15 @@
                         </div>
                         <div class="px-5 py-2">
                             <h3 class="font-bold mb-2">Categoria</h3>
-                            <select class="w-full border-solid border-2 border-gray-400 rounded p-2 categories-option flex justify-between"
+                            <select
+                                class="w-full border-solid border-2 border-gray-400 rounded p-2 categories-option flex justify-between"
                                 id="categories-option-filters">
-                                <!--information obtained from js-->
-                            </select>
+                                <option value="todas">Todas</option>
+                                <!--information obtained from js--></select>
                         </div>
                         <div class="px-5 py-2">
                             <h3 class="font-bold mb-2">Desde</h3>
-                            <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="date" name="from-input"
+                            <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="date" name=""
                                 id="from-input">
                         </div>
                         <div class="px-5 py-2">
@@ -108,21 +106,21 @@
                     </div>
                 </div>
             </div>
-            <div class="md:w-full md:w-2/3 lg:w-auto mx-5 my-10">
-                <div>
+            <div>
+                <div class="w-full md:w-2/3 lg:w-2/4 mx-5 my-10">
                     <div class="bg-white border-solid border slate-900 rounded-md shadow-md shadow-gray-300">
-                        <div class="flex content-center justify-between p-3">
+                        <div class="flex content-center justify-between p-5">
                             <h2 class="text-2xl font-bold p-1">Operaciones</h2>
                             <button class="text-white border-none border-2 rounded border-slate-500 bg-teal-400 p-3"
-                                id="new-operation-btn">+ Nueva operación</button>
-                        </div>
-                        <div class="" id="no-results">
-                            <img class="w-2/3 mt-20 mb-10 mx-20" src="./Img/wallet.svg" alt="no-results-photo">
+                            id="new-operation-btn">+ Nueva operación</button>
+                        </div>    
+                        <div class="mx-2 " id="no-results">
+                            <img class="w-2/3 mt-20 mb-10 mx-20" src="./Img/wallet.svg" alt="">
                             <p class="text-2xl font-medium text-center p-5">Sin resultados</p>
                             <p class="text-center pb-20">Cambia los filtros o agrega operaciones</p>
                         </div>
-                        <div class="w-full p-5" id="table">
-                            <table class="w-full table-auto" id="table-container">
+                        <div class="w-full p-5 hidden" id="table">
+                            <table class="w-full table-auto" id="table-container" >
                                 <thead class="">
                                     <th class="p-3">Descripción</th>
                                     <th class="p-3">Categoría</th>
@@ -131,15 +129,15 @@
                                     <th class="">Acciones</th>
                                 </thead>
                                 <tbody id="body-table">
-                                    <tr class="w-full"></tr>
+                                    <tr class="w-full" ></tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
+                </div>    
+            </div>       
         </section>
-
+     
         <!--NEW OPERATION SECTION-->
         <section id="new-operations-section"
             class="w-auto lg:w-1/2 lg:mx-auto bg-slate-100 text-slate-600 text-slate-8 my-14 rounded-md shadow-md shadow-gray-300 hidden">
@@ -149,7 +147,7 @@
                 </div>
                 <div class="px-5 py-2">
                     <h3 class="font-bold mb-2">Descripción</h3>
-                    <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="text"
+                    <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="text" 
                         id="description-new-op">
                 </div>
                 <div class="px-5 py-2">
@@ -168,12 +166,14 @@
                     <h3 class="font-bold mb-2">Categoria</h3>
                     <select class="w-full border-solid border-2 border-gray-400 rounded p-2 categories-option"
                         id="categories-option-operations">
+                        <option value="todas">Todas</option>
                         <!--information obtained from js-->
                     </select>
                 </div>
                 <div class="px-5 py-2">
                     <h3 class="font-bold mb-2">Fecha</h3>
-                    <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="date" id="date">
+                    <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="date"
+                        id="date">
                 </div>
                 <div class="p-5 flex justify-end">
                     <button class="border-none border-2 rounded border-slate-500 bg-slate-100 p-2"
@@ -182,15 +182,13 @@
                         id="addNewOperation">Agregar</button>
                 </div>
             </div>
-
         </section>
 
-        </section>
         <!--EDIT OPERATION SECTION-->
-        <section class="w-auto lg:w-1/2 lg:mx-auto bg-slate-100 text-slate-600 text-slate-8 my-14 rounded-md shadow-md shadow-gray-300 hidden" 
-            id="edit-operations-section">
+        <section id="edit-operations-section"
+            class="w-auto lg:w-1/2 lg:mx-auto bg-slate-100 text-slate-600 text-slate-8 my-14 rounded-md shadow-md shadow-gray-300 hidden">
             <div class="w-auto bg-white border-solid border-slate-900 rounded-lg mt-8 my-15">
-                <div>
+                <div class="">
                     <h2 class="text-4xl font-bold p-5">Editar operación</h2>
                 </div>
                 <div class="px-5 py-2">
@@ -200,8 +198,8 @@
                 </div>
                 <div class="px-5 py-2">
                     <h3 class="font-bold mb-2">Monto</h3>
-                    <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="number"
-                        name="amountEdit" id="amountEdit">
+                    <input class="w-full border-solid border-2 border-gray-400 rounded p-2" type="number" name="amountEdit"
+                        id="amountEdit">
                 </div>
                 <div class="px-5 py-2">
                     <h3 class="font-bold mb-2">Tipo</h3>
@@ -214,6 +212,7 @@
                     <h3 class="font-bold mb-2">Categoria</h3>
                     <select class="w-full border-solid border-2 border-gray-400 rounded p-2 categories-option"
                         id="categories-option-operations-edit">
+                        <option value="todas">Todas</option>
                         <!--information obtained from js-->
                     </select>
                 </div>
@@ -229,12 +228,12 @@
                         id="btnEditOperation">Editar</button>
                 </div>
             </div>
-
+            </div>
         </section>
 
         <!--CATEGORY SECTION-->
-        <section class="w-auto lg:w-1/2 bg-white text-slate-600 lg:mx-auto mx-4 my-28 p-4 rounded-md shadow-md shadow-300 hidden" 
-            id="category-section">
+        <section id="category-section"
+            class="w-auto lg:w-1/2 bg-white text-slate-600 lg:mx-auto mx-4 my-28 p-4 rounded-md shadow-md shadow-300 hidden">
             <div id="contenedor de la vista" class="justify-center p-4">
                 <h2 class="title-category title font-bold text-3xl  my-5">Categorías</h2>
                 <form id="category-form" class="flex flex-col my-10">
@@ -245,8 +244,8 @@
                         <div class="flex">
                             <input id="input-add-category" name="input-add-category"
                                 class="input border rounded border-gray-400  w-4/5" type="text">
-                            <div>
-                                <button id="add-btn-category" type="button"
+                            <div class="">
+                                <button id="add-btn-category"
                                     class="bg-green-500 text-white font-semibold px-4 py-2 ml-4 rounded-md">Agregar</button>
                             </div>
                         </div>
@@ -259,11 +258,10 @@
                 </form>
             </div>
         </section>
-
         <!--EDIT CATEGORY SECTION-->
-        <section class="w-auto lg:w-1/2 bg-white text-slate-600 lg:mx-auto mx-4 my-28 p-4 rounded-md shadow-md shadow-gray-300 hidden"
-            id="category-edit-section">
-            <div class="justify-center p-4">
+        <section id="category-edit-section"
+            class="w-auto lg:w-1/2 bg-white text-slate-600 lg:mx-auto mx-4 my-28 p-4 rounded-md shadow-md shadow-gray-300 hidden">
+            <div id="" class="justify-center p-4">
                 <h2 class="title-category title font-bold text-3xl my-5">Editar Categoría</h2>
                 <form id="category-edit-form" class="flex flex-col justify-center my-10">
                     <div>
@@ -274,9 +272,10 @@
                             <input name="input-edit-category" id="input-edit-category"
                                 class="input border rounded border-gray-400 w-full" type="text">
                             <div class="flex justify-end pt-6">
-                                <button type="button" id="boton-cancelar-editar-categoria"
-                                    class="bg-gray-300 text-black font-semibold px-3 py-2 ml-4 rounded-md">Cancelar</button>
-                                <button type="button" id="edit-btn-category"
+                                <button type="button"
+                                    class="bg-gray-300 text-black font-semibold px-3 py-2 ml-4 rounded-md"
+                                    id="boton-cancelar-editar-categoria">Cancelar</button>
+                                <button id="edit-btn-category"
                                     class="bg-green-500 text-white font-semibold px-4 py-2 ml-4 rounded-md">Editar</button>
                             </div>
                         </div>
@@ -284,21 +283,19 @@
                 </form>
             </div>
         </section>
-
         <!--REPORTS SECTION-->
-        <section
-            class="w-auto lg:w-1/2 bg-white text-slate-600 lg:mx-auto mx-4 my-28 p-4 rounded-md shadow-md shadow-gray-300 hidden"
-            id="reports-section">
+        <section id="reports-section"
+            class="w-auto lg:w-1/2 bg-white text-slate-600 lg:mx-auto mx-4 my-28 p-4 rounded-md shadow-md shadow-gray-300 hidden">
             <div class="flex-row justify-center p-4">
                 <h2 class="title-category title font-bold text-3xl my-5">Reportes</h2>
-                <div id="no-reports-container" class="w-2/5 m-auto">
-                    <figure>
+                <div id="no-reports-container" class="w-2/5 m-auto hidden">
+                    <figure class="">
                         <img src="https://frontend-proyecto-ahorradas.adaitw.org/imgs/chart.svg" alt="reports-img">
                     </figure>
                     <h3 class="text-gray-800 font-semibold text-lg m-6">Operaciones insuficientes</h3>
                     <h4 class="text-gray-800 mb-2">Prueba agregando más operaciones</h4>
                 </div>
-                <div id="summary-container" class="m-auto hidden">
+                <div id="summary-container" class="m-auto ">
                     <h3 class="font-semibold text-2xl m-4">Resumen</h3>
                     <div class="flex justify-between m-2">
                         <p>Categoría con mayor ganancia</p>
@@ -329,8 +326,7 @@
                     </div>
                     <div class="flex justify-between m-2">
                         <p>Mes con mayor ganancia</p>
-                        <div id="highest-earning-month-name" class="text-gray-600">
-                            <!--information obtained from js-->
+                        <div id="highest-earning-month-name" class="text-gray-600"><!--information obtained from js-->
                         </div>
                         <div id="highest-earning-month-amount" class="text-emerald-500">
                             <!--information obtained from js-->
@@ -338,19 +334,16 @@
                     </div>
                     <div class="flex justify-between m-2">
                         <p>Mes con mayor gasto</p>
-                        <div id="highest-spending-month-name" class="text-gray-600">
-                            <!--information obtained from js-->
+                        <div id="highest-spending-month-name" class="text-gray-600"><!--information obtained from js-->
                         </div>
-                        <div id="highest-spending-month-amount" class="text-red-500">
-                            <!--information obtained from js-->
+                        <div id="highest-spending-month-amount" class="text-red-500"><!--information obtained from js-->
                         </div>
                     </div>
                 </div>
             </div>
-
         </section>
-
     </main>
+    <footer></footer>
     <script src="./JS/main.js"></script>
 </body>
 
