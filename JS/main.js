@@ -30,7 +30,12 @@ $("#category-btn-nav").addEventListener('click', () => {
 
 $("#reports-btn-nav").addEventListener('click', () => {
     $("#reports-section").classList.remove('hidden');
-    hiddenElement(["#category-section", "#balances-section", "#new-operations-section", "#category-edit-section"])
+    hiddenElement(["#category-section", "#balances-section", "#new-operations-section", "#category-edit-section"]);
+
+	if(getData('operationsLS') != null && getData('operationsLS').length > 0){
+		$("#no-reports-container").classList.add("hidden");
+		$("#summary-container").classList.remove("hidden");
+	}
 });
 
 
@@ -53,10 +58,7 @@ $("#btn-cruz-options").addEventListener("click", () => {
     $("#navbar-btn").classList.remove("fixed", "top-19", "right-0", "mt-8", "shadow-md", "shadow-gray-300", "rounded-md")
 })
 
-if(getData('operationsLS').length > 1){
-    $("#no-reports-container").classList.add("hidden");
-    $("#summary-container").classList.remove("hidden");
-}
+
 /* CATEGORIAS */
 const categoriesListDefault = [
     {
@@ -429,13 +431,15 @@ const updateReports = () =>{
        const highestEarningCategory = getHighestEarningCategory();
        const highestSpendingCategory = getHighestSpendingCategory();
        const highestBalanceCategory = getHighestBalanceCategory(operations, categories);
-       const highestEarningMonth = getHighestRevenueMonth();
+      
+	   const highestEarningMonth = getHighestRevenueMonth();
        const highestSpendingMonth = getHighestSpentMonth();
    
-   
-       $("#highest-earning-category-name").innerText = highestEarningCategory.name;
+   /*
+       $("#highest-earning-category-name").innerText = highestEarningCategory.category;
        $("#highest-earning-category-amount").innerText = `$${highestEarningCategory.amount}`;
    
+	   
        $("#highest-spending-category-name").innerText = highestSpendingCategory.name;
        $("#highest-spending-category-amount").innerText = `$${highestSpendingCategory.amount}`;
    
@@ -447,10 +451,13 @@ const updateReports = () =>{
    
        $("#highest-spending-month-name").innerText = highestSpendingMonth.name;
        $("#highest-spending-month-amount").innerText = `$${highestSpendingMonth.amount}`;
+
+*/
    };
 
 
 const getHighestEarningCategory = () => {
+
     const getCategoryWithHighestEarning = (operations) => {
         const revenueByCategory = {};
         operations.forEach(operation => {
@@ -477,9 +484,12 @@ const getHighestEarningCategory = () => {
         };
         
     };
-    const highestEarningCategory = getCategoryWithHighestEarning(operations);
+
+	const highestEarningCategory = getCategoryWithHighestEarning(operations);
+
     $("#highest-earning-category-name").innerHTML = highestEarningCategory.category || "No hay registros de categorías con ganancias";
-    $("#highest-earning-category-amount").innerHTML = `$${highestEarningCategory.amount || "+$0.00"}`
+    $("#highest-earning-category-amount").innerHTML = `$${highestEarningCategory.amount || "+$0.00"}`;
+
 }
 
 //mayor gasto categoria
@@ -620,16 +630,18 @@ const getMonthWithHighesSpending = () => {
 
 const getHighestSpentMonth = () => {
     const highestSpentMonth = getMonthWithHighesSpending();
-    const [month, year] = highestSpentMonth.month.split(',');
+	if(highestSpentMonth.month != null){
+		const [month, year] = highestSpentMonth.month.split(',')[0].split('-');
 
-    const monthNames = [
-        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-    ];
+		const monthNames = [
+			"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+			"Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+		];
 
-    const monthName = monthNames[parseInt(month)];
-    $("#highest-spending-month-name").innerHTML = `${monthName} ${year}`;
-    $("#highest-spending-month-amount").innerHTML = `+$${highestSpentMonth.spent}`;
+		const monthName = monthNames[parseInt(month)];
+		$("#highest-spending-month-name").innerHTML = `${monthName} ${year}`;
+		$("#highest-spending-month-amount").innerHTML = `+$${highestSpentMonth.spent}`;
+	}	
 };
 
 
@@ -645,4 +657,4 @@ const initializeApp = () => {
     updateReports(operations);
 
 }
-window.addEventListener("load", initializeApp())
+window.addEventListener("load", initializeApp());
