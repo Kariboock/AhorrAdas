@@ -188,11 +188,11 @@ const renderNewOperations = (operations) => {
             $("#body-table").innerHTML += `
         <div class="w-full flex justify-items-center p-3">
         <tr>
-        <td class="font-bold pl-4 lg:pl-14">${operation.descripcion}</td>
-        <td class="border-none border-2 rounded border-slate-500 bg-emerald-100 pl-6">${operation.categoria}</td>
-        <td class="pl-4">${operation.fecha}</td>
-        <td class="pl-4">${ItemRenderAmount(operation.tipo,operation.monto)}</td> 
-        <td class="pl-4">            
+        <td class="font-bold pl-2 lg:pl-2">${operation.descripcion}</td>
+        <td class="border-none border-2 rounded border-slate-500 bg-emerald-100 pl-2">${operation.categoria}</td>
+        <td class="pl-2">${operation.fecha}</td>
+        <td class="pl-2">${ItemRenderAmount(operation.tipo,operation.monto)}</td> 
+        <td class="pl-2">            
         <div"><button class="text-blue-400" onclick="showSectionEdit('${operation.id}')">Editar</button></div>
         <div><button class="text-blue-400" onclick="deleteItem('${operation.id}')">Eliminar</button></div>  
         </td>                
@@ -433,26 +433,8 @@ const updateReports = () =>{
        const highestBalanceCategory = getHighestBalanceCategory(operations, categories);
       
 	   const highestEarningMonth = getHighestRevenueMonth();
-       const highestSpendingMonth = getHighestSpentMonth();
-   
-   /*
-       $("#highest-earning-category-name").innerText = highestEarningCategory.category;
-       $("#highest-earning-category-amount").innerText = `$${highestEarningCategory.amount}`;
-   
-	   
-       $("#highest-spending-category-name").innerText = highestSpendingCategory.name;
-       $("#highest-spending-category-amount").innerText = `$${highestSpendingCategory.amount}`;
-   
-       $("#highest-balance-category-name").innerText = highestBalanceCategory.name;
-       $("#highest-balance-category-amount").innerText = `$${highestBalanceCategory.amount}`;
-   
-       $("#highest-earning-month-name").innerText = highestEarningMonth.name;
-       $("#highest-earning-month-amount").innerText = `$${highestEarningMonth.amount}`;
-   
-       $("#highest-spending-month-name").innerText = highestSpendingMonth.name;
-       $("#highest-spending-month-amount").innerText = `$${highestSpendingMonth.amount}`;
+       const highestSpendingMonth = getHighestSpentMonth();   
 
-*/
    };
 
 
