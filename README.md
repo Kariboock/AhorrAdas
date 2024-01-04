@@ -106,7 +106,14 @@ Para este proyecto trabajarás en equipo siguiendo prácticas que se utilizan pr
 
 
 
-<p align="center"> 
+<p align="center">         
+   <a href="https://www.w3schools.com/html/html_intro.asp" target="_blank"> 
+       <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="100" height="100"/> 
+    </a> 
+    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank"> 
+       <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="80" height="80"/>   
+    </a> 
+</p>
   <a href="https://www.w3schools.com/html/html_intro.asp" target="_blank"> 
     <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="100" height="100"/> 
   </a> 
@@ -114,8 +121,6 @@ Para este proyecto trabajarás en equipo siguiendo prácticas que se utilizan pr
     <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="80" height="80"/>   
   </a>
 </p>
-
-
   
 ---
 
