@@ -53,7 +53,10 @@ $("#btn-cruz-options").addEventListener("click", () => {
     $("#navbar-btn").classList.remove("fixed", "top-19", "right-0", "mt-8", "shadow-md", "shadow-gray-300", "rounded-md")
 })
 
-
+if(getData('operationsLS').length > 1){
+    $("#no-reports-container").classList.add("hidden");
+    $("#summary-container").classList.remove("hidden");
+}
 /* CATEGORIAS */
 const categoriesListDefault = [
     {
@@ -84,13 +87,11 @@ const categoriesListDefault = [
 
 const categories = getData("categoriesLS") || categoriesListDefault
 
-
-
-
 const categoriesList = (categories) => {
     cleanContainer("#categories-list")
     cleanContainer("#categories-option-filters")
     cleanContainer("#categories-option-operations")
+    $("#categories-option-filters").innerHTML += `<option value="todas">Todas</option>`
     if (Array.isArray(categories) && categories !== undefined && categories !== null) {
         for (const category of categories) {
             $("#categories-list").innerHTML += `
@@ -110,9 +111,6 @@ const categoriesList = (categories) => {
     }
 }
 
-
-
-//delete category
 const deleteCategory = (categoryId) => {
     for (let i = 0; i < $$('.delete-categories').length; i++) {
         $$('.delete-categories')[i].onclick = () => {
@@ -126,9 +124,7 @@ const deleteCategory = (categoryId) => {
         }
     }
 }
-//deleteCategory(category)
 
-// //edit category
 const viewEditCategory = (idOfCategory) => {
     hiddenElement(["#new-operations-section", "#reports-section", "#category-section", "#balances-section"])
     $("#category-edit-section").classList.remove('hidden')
@@ -148,10 +144,9 @@ const confirmEditCategory = () => {
     });
 
     setData('categoriesLS', updatedCategories);
-    categoriesList(updatedCategories);
+    categoriesList(categories)
 }
 
-//add category 
 const saveNewCategory = () => {
     return {
         categoryName: $("#input-add-category").value,
@@ -164,7 +159,23 @@ $("#boton-cancelar-editar-categoria").onclick = () => {
     $("#category-section").classList.remove('hidden')
 }
 
+$("#add-btn-category").addEventListener("click", (e) => {
+    e.preventDefault();
+    const updateCategories = getData('categoriesLS');
+    updateCategories.push(saveNewCategory());
+    setData('categoriesLS', updateCategories);
+    categoriesList(categories);
+    window.location.reload()
+})
 
+$("#edit-btn-category").addEventListener("click", (e) => {
+    e.preventDefault();
+    const updateEditedCategories = getData('categoriesLS');
+    setData('categoriesLS', updateEditedCategories);
+    confirmEditCategory(updateEditedCategories);
+    categoriesList(categories);
+    window.location.reload(["#categories-list", "#categories-option-filters", "#categories-option-operations", "#categories-option-operations-edit"])
+})
 
 // OPERATIONS
 const operations = getData("operationsLS") || []
@@ -175,8 +186,8 @@ const renderNewOperations = (operations) => {
             $("#body-table").innerHTML += `
         <div class="w-full flex justify-items-center p-3">
         <tr>
-        <td class="font-bold pl-4">${operation.descripcion}</td>
-        <td class="border-none border-2 rounded border-slate-500 bg-emerald-100 pl-4">${operation.categoria}</td>
+        <td class="font-bold pl-4 lg:pl-14">${operation.descripcion}</td>
+        <td class="border-none border-2 rounded border-slate-500 bg-emerald-100 pl-6">${operation.categoria}</td>
         <td class="pl-4">${operation.fecha}</td>
         <td class="pl-4">${ItemRenderAmount(operation.tipo,operation.monto)}</td> 
         <td class="pl-4">            
@@ -186,11 +197,10 @@ const renderNewOperations = (operations) => {
         </tr> 
         `
         }
-    } if (getData('operationsLS').length > 0){
-		hiddenElement(["#no-results"]);
-	}else{
-		hiddenElement(["#table"]);
-	}
+    } if (getData('operationsLS').length > 0) {
+        $("#no-results").classList.add("hidden");
+        $("#table").classList.remove("hidden");
+    }
 }
 
 const ItemRenderAmount = (tipo,amount)=>{
@@ -214,7 +224,6 @@ const saveNewOperation = () => {
         tipo: $("#type-new-operation").value
     }
 }
-
 
 const saveEditOperation = (operationId) => {
     return {
@@ -251,13 +260,8 @@ const deleteItem =  (operationId) => {
 	}
 }
 
-
 // EVENTS
-
     
-setData("operationsLS",operations);
-    
-
 $("#cancelNewOperation").addEventListener("click", (e) => {
     $("#new-operations-section").classList.add("hidden")
     $("#balances-section").classList.remove("hidden")
@@ -294,9 +298,6 @@ $("#btnEditOperation").addEventListener("click", (e) => {
 	setData("operationsLS",currentData);
     window.location.reload();
 })
-
-
-
 
 /* FILTROS */
 $("#hide-filters").addEventListener("click", () => {
@@ -400,7 +401,6 @@ const renderBalance = () => {
         updatedBalance()
     }
 }
-//renderBalance()
 
 $("#type-operation-balances-section").addEventListener("change", () => {
     cleanContainer("#body-table");
@@ -478,7 +478,7 @@ const getHighestEarningCategory = () => {
         
     };
     const highestEarningCategory = getCategoryWithHighestEarning(operations);
-    $("#highest-earning-category-name").innerText = highestEarningCategory.category || "No hay registros de categorías con ganancias";
+    $("#highest-earning-category-name").innerHTML = highestEarningCategory.category || "No hay registros de categorías con ganancias";
     $("#highest-earning-category-amount").innerHTML = `$${highestEarningCategory.amount || "+$0.00"}`
 }
 
@@ -572,7 +572,7 @@ const getMonthWithHighestRevenue = () => {
 
 const getHighestRevenueMonth = () => {
     const highestRevenueMonth = getMonthWithHighestRevenue();
-    const [month, year] = highestRevenueMonth.month.split(' ');
+    const [month, year] = highestRevenueMonth.month.split('-');
 
     const monthNames = [
         "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -620,7 +620,7 @@ const getMonthWithHighesSpending = () => {
 
 const getHighestSpentMonth = () => {
     const highestSpentMonth = getMonthWithHighesSpending();
-    const [month, year] = highestSpentMonth.month.split(' ');
+    const [month, year] = highestSpentMonth.month.split(',');
 
     const monthNames = [
         "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -639,37 +639,10 @@ const initializeApp = () => {
     setData("operationsLS", operations);
     setData('categoriesLS', categories);
     categoriesList(categories);
+
     renderNewOperations(operations);
     renderBalance(operations);
     updateReports(operations);
 
-    if (getData('operationsLS').length > 0) {
-        $("#no-results").classList.add("hidden");
-        $("#table").classList.remove("hidden");
-    }
-
-    if(getData('operationsLS').length > 1){
-        $("#no-reports-container").classList.add("hidden");
-        $("#summary-container").classList.remove("hidden");
-    }
-
-    $("#categories-option-filters").innerHTML += `<option value="todas" Selected>Todas</option>`;
-
-    $("#add-btn-category").addEventListener("click", (e) => {
-        e.preventDefault();
-        const updateCategories = getData('categoriesLS');
-        updateCategories.push(saveNewCategory());
-        setData('categoriesLS', updateCategories);
-        categoriesList(categories);
-        window.location.reload()
-    })
-
-    $("#edit-btn-category").addEventListener("click", (e) => {
-        e.preventDefault();
-        const updateEditedCategories = getData('categoriesLS');
-        setData('categoriesLS', updateEditedCategories);
-        categoriesList(categories);
-        confirmEditCategory();
-    })
 }
 window.addEventListener("load", initializeApp())
