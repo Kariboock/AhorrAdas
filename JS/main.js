@@ -184,7 +184,6 @@ const operations = getData("operationsLS") || []
 const renderNewOperations = (operations) => {
     if (Array.isArray(operations) && operations !== undefined && operations !== null) {
         for (const operation of operations) {
-            //cleanContainer("#body-table")
             $("#body-table").innerHTML += `
         <div class="w-full flex justify-items-center p-3">
         <tr>
@@ -564,7 +563,8 @@ const getMonthWithHighestRevenue = () => {
 
 const getHighestRevenueMonth = () => {
     const highestRevenueMonth = getMonthWithHighestRevenue();
-    const [month, year] = highestRevenueMonth.month.split('-');
+    if(highestRevenueMonth.month != null){
+    const [month, year] = highestRevenueMonth.month.split(',')[0].split('-');
 
     const monthNames = [
         "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -574,6 +574,7 @@ const getHighestRevenueMonth = () => {
     const monthName = monthNames[parseInt(month)];
     $("#highest-earning-month-name").innerHTML = `${monthName} ${year}`;
     $("#highest-earning-month-amount").innerHTML = `+$${highestRevenueMonth.revenue}`;
+    }
 }
 
 const getMonthWithHighesSpending = () => {
